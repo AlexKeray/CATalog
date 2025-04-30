@@ -1,0 +1,12 @@
+# Позволява пренаписване на URL-и
+# http://localhost/index.php?page=about става на http://localhost/about
+RewriteEngine On
+
+# Ако заявеният URL не е реален файл в папката, тогава продължи по надолу.
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Пренасочи всички заявки към index.php.
+# ^ означава "всичко".
+# QSA (Query String Append) — запазва параметрите от URL-а (напр. ?id=5)
+# L (Last) — спира обработката на правилата.
+RewriteRule ^ index.php [QSA,L]
