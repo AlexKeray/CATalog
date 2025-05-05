@@ -2,6 +2,9 @@
 # http://localhost/index.php?page=about става на http://localhost/about
 RewriteEngine On
 
+# 
+RewriteBase /CATalog/
+
 # Ако заявеният URL не е реален файл в папката, тогава продължи по надолу.
 RewriteCond %{REQUEST_FILENAME} !-f
 

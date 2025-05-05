@@ -1,15 +1,17 @@
 <?php
 
-class HomeController {
+require_once BASE_PATH . '/app/controllers/common/BaseController.php';
 
-    private $smarty;
+class HomeController extends BaseController {
 
-    public function __construct($smarty) {
-        $this->smarty = $smarty;
+    public function __construct($smarty, $pdo)
+    {
+        parent::__construct($smarty, $pdo);
     }
 
-    public function index() {
-        $this->smarty->assign('user', 'Алекс');
+    public function homeShow() 
+    {
+        $this->assignUser();
         $this->smarty->display('home.tpl');
     }
 }
