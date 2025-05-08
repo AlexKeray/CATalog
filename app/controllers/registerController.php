@@ -31,15 +31,19 @@ class RegisterController extends BaseController
             try {
                 $stmt = $this->pdo->prepare('INSERT INTO users (username, password) VALUES (?, ?)');
                 $stmt->execute([$username, $password]);
-                $message = "Регистрацията е успешна!";
-                $this->smarty->assign('message', $message);
-                $this->smarty->assign('user', $username);
+
+                $this->setAlert(Alert::RegistrationSuccess, AlertType::Success);
+
                 $_SESSION['username'] = $username;
+
                 $this->redirect(BASE_URL . '/home.php');
 
             } catch (PDOException $e) {
-                $message = "Грешка: " . $e->getMessage();
-                $this->smarty->assign('message', $message);
+
+                $this->setAlert(Alert::UsernameTaken, AlertType::Error);
+
+                //$this->printException($e);
+
                 $this->redirect(BASE_URL . '/register.php');
             }
 

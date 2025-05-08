@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-05 10:29:50
+/* Smarty version 5.4.5, created on 2025-05-07 09:00:02
   from 'file:home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_681876fe4c50c8_57246165',
+  'unifunc' => 'content_681b04f23fc009_40659036',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '84727bc302e2d9060681f782ba87aa3b0a16853f' => 
     array (
       0 => 'home.tpl',
-      1 => 1746433759,
+      1 => 1746601066,
       2 => 'file',
     ),
   ),
@@ -20,31 +20,64 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_681876fe4c50c8_57246165 (\Smarty\Template $_smarty_tpl) {
+function content_681b04f23fc009_40659036 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1956561883681876fe496638_58588975', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1633817728681b04f23d9592_15867356', "content");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_1956561883681876fe496638_58588975 extends \Smarty\Runtime\Block
+class Block_1633817728681b04f23d9592_15867356 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 ?>
 
-    <?php if ($_smarty_tpl->getValue('user')) {?>
+
+    <?php if ($_smarty_tpl->getValue('user') === null) {?>
+    <h1>Моля, логни се.</h1>
+    <?php } else { ?>
         <h1>Здравей, <?php echo $_smarty_tpl->getValue('user');?>
 !</h1>
-    <?php } else { ?>
-        <h1>Моля, логни се.</h1>
-    <?php }
+        <h2>Списък с филми и сериали</h2>
+
+        <?php if ((true && ($_smarty_tpl->hasVariable('movies') && null !== ($_smarty_tpl->getValue('movies') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('movies')) > 0) {?>              <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('movies'), 'movie');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('movie')->value) {
+$foreach0DoElse = false;
+?>
+                <div style="margin-bottom: 30px;">
+                    <h3><?php echo $_smarty_tpl->getValue('movie')['name'];?>
+</h3>
+                    <p>Жанр: <?php echo $_smarty_tpl->getValue('movie')['genre_name'];?>
+</p>
+                    <p>Година: <?php echo $_smarty_tpl->getValue('movie')['year'];?>
+</p>
+                    <p>Продължителност: <?php echo $_smarty_tpl->getValue('movie')['duration'];?>
+ минути</p>
+
+                    <?php if ($_smarty_tpl->getValue('movie')['image_path']) {?>
+                        <img src="<?php echo $_smarty_tpl->getValue('movie')['image_path'];?>
+" alt="Постер" style="max-width: 200px;">
+                    <?php }?>
+                </div>
+                <hr>
+            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+        <?php } else { ?>
+            <p>Няма добавени филми/сериали.</p>
+        <?php }?>
+    <?php }?>
+
+<?php
 }
 }
 /* {/block "content"} */

@@ -39,12 +39,14 @@ class LoginController extends BaseController
 
                     $this->redirect(BASE_URL . '/home.php');
                 } else {
-                    $this->smarty->assign('message', 'Невалидно потребителско име или парола.');
+                    $this->setAlert(Alert::LoginCredFailed, AlertType::Warning);
                     $this->smarty->assign('old_username', htmlspecialchars($username));
                     $this->smarty->display('login.tpl');
                 }
             } catch (PDOException $e) {
-                $this->smarty->assign('message', 'Грешка: ' . $e->getMessage());
+
+                $this->printException($e);
+
                 $this->smarty->display('login.tpl');
             }
         } else {

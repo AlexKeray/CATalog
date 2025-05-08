@@ -1,0 +1,32 @@
+DROP DATABASE IF EXISTS CATalog;
+
+CREATE DATABASE CATalog CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+USE CATalog;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE genres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT
+);
+
+CREATE TABLE movies (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    genre_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    image_path VARCHAR(255),
+    year INT NOT NULL,
+    duration INT NOT NULL,
+    FOREIGN KEY (genre_id) REFERENCES genres(id)
+);
+
+INSERT INTO genres (name, description)
+VALUES 
+('Аниме', 'Жанр с японска анимация'),
+('Комедия', 'Жанр със забавни и хумористични елементи');

@@ -1,5 +1,9 @@
 <?php
 
+// Alerts --------------------------------------------------------V
+require_once BASE_PATH . '/misc/alerts.php';
+
+
 // Smarty --------------------------------------------------------V
 require_once BASE_PATH . '/vendor/autoload.php'; // За Smarty
 

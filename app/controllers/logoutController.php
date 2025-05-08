@@ -16,6 +16,10 @@ class LogoutController extends BaseController
 
         session_destroy();
 
+        session_start();
+
+        $this->setAlert(Alert::LogoutSuccess, AlertType::Success);
+
         $this->redirect(BASE_URL . '/login.php');
     }
 }

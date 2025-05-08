@@ -11,6 +11,8 @@ class BaseController
         $this->pdo = $pdo;
 
         $this->smarty->assign('base_path', BASE_PATH);
+
+        $this->loadAlert(); // зарежда съобщението от сесията в смартито
     }
 
     protected function redirect($url)
@@ -24,5 +26,46 @@ class BaseController
         $this->user = $_SESSION['username'] ?? null;
         $this->smarty->assign('user', $this->user);
     }
+
+    // метод за задаване на съобщение в сесията
+    // типът на съобщението може да бъде 'message', 'error' или 'warning'
+    // методът работи заедно с метода loadAlert() който зарежда съобщението от сесията в смартито
+    // това е така за да може да се предават съобщения през редиректи
+    public function setAlert(Alert $text, AlertType $type = AlertType::Message)
+    {
+        $allowedTypes = [AlertType::Message, AlertType::Success, AlertType::Warning, AlertType::Error];
+        //$allowedTypes = ['message', 'error', 'warning'];
+
+    
+        if (!in_array($type, $allowedTypes)) {
+            throw new InvalidArgumentException("Невалиден тип за alert: " . htmlspecialchars($type));
+        }
+    
+        $_SESSION[$type->value] = $text->value;
+
+        $this->smarty->assign($type->value, $text->value);
+    }
+    
+    private function loadAlert()
+    {
+        foreach ([AlertType::Message, AlertType::Success, AlertType::Warning, AlertType::Error] as $alertType) {
+            if (isset($_SESSION[$alertType->value])) {
+                $this->smarty->assign($alertType->value, $_SESSION[$alertType->value]);  // $this->smarty->assign(var_name, var_value);
+                unset($_SESSION[$alertType->value]);
+            }
+        }
+    }
+
+    protected function printException(Throwable $e)
+    {
+        // 1. Показваш грешката на екрана (за разработка)
+        echo '<pre>';
+        echo "Грешка: " . htmlspecialchars($e->getMessage()) . "\n\n";
+        echo "Файл: " . $e->getFile() . ":" . $e->getLine() . "\n\n";
+        echo "Stack trace:\n" . $e->getTraceAsString();
+        echo '</pre>';
+        exit;
+    }
+
 }
 ?>
