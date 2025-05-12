@@ -3,7 +3,7 @@ class BaseController
 {
     protected $smarty;
     protected $pdo;
-    protected $user;
+    protected $user = [];
 
     public function __construct($smarty, $pdo = null)
     {
@@ -11,6 +11,8 @@ class BaseController
         $this->pdo = $pdo;
 
         $this->smarty->assign('base_path', BASE_PATH);
+
+        $this->assignUser();
 
         $this->loadAlert(); // зарежда съобщението от сесията в смартито
     }
@@ -23,8 +25,21 @@ class BaseController
 
     protected function assignUser() // извлича потребителя от сесията и го присвоява на полето $user на този контролер (родителския на останалите)
     {
-        $this->user = $_SESSION['username'] ?? null;
+        // $this->user['id'] = $_SESSION['id'] ?? null;
+        // $this->user['username'] = $_SESSION['username'] ?? null;    
+        $this->user = [
+            'id' => $_SESSION['user']['id'] ?? null,
+            'username' => $_SESSION['user']['username'] ?? null
+        ];
+
         $this->smarty->assign('user', $this->user);
+    }
+
+    protected function authorise()
+    {
+        if (!isset($this->user['id'])) {
+            $this->redirect(BASE_URL . '/login.php');
+        }
     }
 
     // метод за задаване на съобщение в сесията

@@ -2,22 +2,25 @@
 
 {block name="content"}
 
-    {if $user === null}
-    <h1>Моля, логни се.</h1>
+    
+    {if isset($user.id)}
+        <h1>Здравей, {$user.username}!</h1>
     {else}
-        <h1>Здравей, {$user}!</h1>
+        <h1>Здравей!</h1>
+    {/if}
+
         <h2>Списък с филми и сериали</h2>
 
-        {if isset($movies) && $movies|@count > 0}  {* $movies|@count брои колко елемента има в $movies *}
-            {foreach from=$movies item=movie}
+        {if isset($media) && $media|@count > 0}  {* $media|@count брои колко елемента има в $media *}
+            {foreach from=$media item=mediaItem}
                 <div style="margin-bottom: 30px;">
-                    <h3>{$movie.name}</h3>
-                    <p>Жанр: {$movie.genre_name}</p>
-                    <p>Година: {$movie.year}</p>
-                    <p>Продължителност: {$movie.duration} минути</p>
+                    <h3>{$mediaItem.name}</h3>
+                    <p>Жанр: {$mediaItem.genre_name}</p>
+                    <p>Година: {$mediaItem.year}</p>
+                    <p>Продължителност: {$mediaItem.duration} минути</p>
 
-                    {if $movie.image_path}
-                        <img src="{$movie.image_path}" alt="Постер" style="max-width: 200px;">
+                    {if $mediaItem.image_path}
+                        <img src="{$mediaItem.image_path}" alt="Постер" style="max-width: 200px;">
                     {/if}
                 </div>
                 <hr>
@@ -25,6 +28,5 @@
         {else}
             <p>Няма добавени филми/сериали.</p>
         {/if}
-    {/if}
 
 {/block}

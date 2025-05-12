@@ -4,6 +4,13 @@
 <h2>Добави Филм/Сериал</h2>
 
 <form action="/CATalog/upload.php" method="post" enctype="multipart/form-data">
+    <label>Тип:</label>
+    <select name="type" required>
+        <option value="">Избери тип</option>
+        {foreach from=$types item=type}
+            <option value="{$type.id}">{$type.name}</option>
+        {/foreach}
+    </select><br><br>
     <label>Жанр:</label>
     <select name="genre" required>
         <option value="">Избери жанр</option>

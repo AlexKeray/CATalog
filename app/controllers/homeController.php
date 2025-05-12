@@ -9,38 +9,35 @@ class HomeController extends BaseController {
         parent::__construct($smarty, $pdo);
     }
 
-    public function homeShow() 
+    public function homeShow()
     {
         $this->assignUser();
 
-        if ($this->user === null) {
-            $this->smarty->display('home.tpl');
-            return;
-        }
-
-        try {
-            $stmt = $this->pdo->query('
-                SELECT 
-                    movies.id,
-                    movies.name,
-                    movies.image_path,
-                    movies.year,
-                    movies.duration,
-                    genres.name AS genre_name
-                FROM movies
-                JOIN genres ON movies.genre_id = genres.id
-                ORDER BY movies.id ASC
-            ');
-
-            $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $this->smarty->assign('movies', $movies);
-        } catch (PDOException $e) {
-            $this->printException($e);
-        }
+        $this->loadMedia();
 
         $this->smarty->display('home.tpl');
     }
 
+    private function loadMedia()
+    {
+        try {
+            $stmt = $this->pdo->query('
+                SELECT m.*, g.name AS genre_name, t.name AS type_name
+                FROM media m
+                JOIN genres g ON m.genre_id = g.id
+                JOIN types t ON m.type_id = t.id
+                ORDER BY m.id ASC
+            ');
+
+            $media = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $this->smarty->assign('media', $media);
+        } catch (PDOException $e) {
+            $this->printException($e);
+        }
+    }
+
 }
+
+
 
 ?>

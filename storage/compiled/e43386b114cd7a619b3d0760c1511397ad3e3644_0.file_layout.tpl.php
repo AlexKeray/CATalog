@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-08 10:46:10
+/* Smarty version 5.4.5, created on 2025-05-12 10:31:11
   from 'file:layout.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_681c6f52e2ec62_07582122',
+  'unifunc' => 'content_6821b1cf2ba208_50072885',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e43386b114cd7a619b3d0760c1511397ad3e3644' => 
     array (
       0 => 'layout.tpl',
-      1 => 1746693967,
+      1 => 1747038669,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_681c6f52e2ec62_07582122 (\Smarty\Template $_smarty_tpl) {
+function content_6821b1cf2ba208_50072885 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 ?>
@@ -37,9 +37,9 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
     <nav>
     <ul>
         <li><a href="http://localhost/CATalog/home.php">Начало</a></li>
-        <?php if ($_smarty_tpl->getValue('user')) {?>
+        <?php if ((true && (true && null !== ($_smarty_tpl->getValue('user')['id'] ?? null)))) {?>
             <li><a href="http://localhost/CATalog/upload.php">Добави филм</a></li>
-            <li><a href="http://localhost/CATalog/logout.php">Изход (<?php echo $_smarty_tpl->getValue('user');?>
+            <li><a href="http://localhost/CATalog/logout.php">Изход (<?php echo ($_smarty_tpl->getValue('user')['username']);?>
 )</a></li>
         <?php } else { ?>
             <li><a href="http://localhost/CATalog/login.php">Вход</a></li>
@@ -79,14 +79,14 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 <?php }?>
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1658021145681c6f52e1b4d5_92330060', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2589370536821b1cf2b0950_55299383', "content");
 ?>
 
 
 </body>
 </html><?php }
 /* {block "content"} */
-class Block_1658021145681c6f52e1b4d5_92330060 extends \Smarty\Runtime\Block
+class Block_2589370536821b1cf2b0950_55299383 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';

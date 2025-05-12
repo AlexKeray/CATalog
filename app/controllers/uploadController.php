@@ -11,34 +11,43 @@ class UploadController extends BaseController
 
     public function uploadShow()
     {
-        $this->assignUser();
+        //$this->assignUser();
 
-        if ($this->user === null) {
-            $this->redirect(BASE_URL . '/login.php');
-            return;
-        }
+        // if ($this->user === null) {
+        //     $this->redirect(BASE_URL . '/login.php');
+        //     return;
+        // }
 
-        try {
-            $stmt = $this->pdo->query('SELECT id, name FROM genres ORDER BY name');
-            $genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $this->smarty->assign('genres', $genres);
-        } catch (PDOException $e) {
-            $this->printException($e);
-        }
+        $this->authorise();
+
+        // try {
+        //     $stmt = $this->pdo->query('SELECT id, name FROM genres ORDER BY name');
+        //     $genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //     $this->smarty->assign('genres', $genres);
+        // } catch (PDOException $e) {
+        //     $this->printException($e);
+        // }
+
+        $this->laodTypes();
+        $this->laodGenres();
+   
 
         $this->smarty->display('upload.tpl');
     }
 
     public function uploadExecute()
     {
-        $this->assignUser();
+        //$this->assignUser();
 
-        if ($this->user === null) {
-            $this->redirect(BASE_URL . '/login.php');
-            return;
-        }
+        // if ($this->user === null) {
+        //     $this->redirect(BASE_URL . '/login.php');
+        //     return;
+        // }
+
+        $this->authorise();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $typeId = $_POST['type'] ?? '';
             $genreId = $_POST['genre'] ?? '';
             $name = trim($_POST['name'] ?? '');
             $year = $_POST['year'] ?? '';
@@ -67,15 +76,17 @@ class UploadController extends BaseController
 
             try {
                 $stmt = $this->pdo->prepare('
-                    INSERT INTO movies (genre_id, name, image_path, year, duration)
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO media (type_id, genre_id, name, image_path, year, duration, user_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
                 ');
                 $stmt->execute([
+                    $typeId,
                     $genreId,
                     $name,
                     $imagePath,
                     $year,
-                    $duration
+                    $duration,
+                    $this->user['id']
                 ]);
 
                 $this->setAlert(Alert::MovieAddedSuccessfull, AlertType::Success);
@@ -90,4 +101,28 @@ class UploadController extends BaseController
             $this->redirect(BASE_URL . '/upload.php');
         }
     }
+
+    private function laodGenres()
+    {
+        try {
+            $stmt = $this->pdo->query('SELECT id, name FROM genres ORDER BY name');
+            $genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $this->smarty->assign('genres', $genres);
+        } catch (PDOException $e) {
+            $this->printException($e);
+        }
+    }
+
+        private function laodTypes()
+    {
+        try {
+            $stmt = $this->pdo->query('SELECT id, name FROM types ORDER BY name');
+            $types = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $this->smarty->assign('types', $types);
+        } catch (PDOException $e) {
+            $this->printException($e);
+        }
+    }
+
+
 }

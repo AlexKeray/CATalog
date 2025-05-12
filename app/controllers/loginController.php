@@ -11,13 +11,6 @@ class LoginController extends BaseController
 
     public function loginShow()
     {
-        $this->assignUser();
-
-        if ($this->user !== null) {
-            $this->redirect(BASE_URL . '/home.php');
-            return;
-        }
-
         $this->smarty->display('login.tpl');
     }
 
@@ -35,7 +28,10 @@ class LoginController extends BaseController
                 $dbUser = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 if ($dbUser && password_verify($password, $dbUser['password'])) {
-                    $_SESSION['username'] = $dbUser['username'];
+                    $_SESSION['user'] = [
+                        'id' => $dbUser['id'],
+                        'username' => $dbUser['username']
+                    ];
 
                     $this->redirect(BASE_URL . '/home.php');
                 } else {

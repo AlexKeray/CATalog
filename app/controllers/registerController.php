@@ -11,13 +11,6 @@ class RegisterController extends BaseController
 
     public function registerShow()
     {
-        $this->assignUser();
-
-        if ($this->user !== null) {
-            $this->redirect(BASE_URL . '/home.php');
-            return;
-        }
-
         $this->smarty->display('register.tpl');
     }
 

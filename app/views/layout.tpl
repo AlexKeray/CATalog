@@ -11,9 +11,9 @@
     <nav>
     <ul>
         <li><a href="http://localhost/CATalog/home.php">Начало</a></li>
-        {if $user}
+        {if isset($user.id)}
             <li><a href="http://localhost/CATalog/upload.php">Добави филм</a></li>
-            <li><a href="http://localhost/CATalog/logout.php">Изход ({$user})</a></li>
+            <li><a href="http://localhost/CATalog/logout.php">Изход ({($user.username)})</a></li>
         {else}
             <li><a href="http://localhost/CATalog/login.php">Вход</a></li>
             <li><a href="http://localhost/CATalog/register.php">Регистрация</a></li>
