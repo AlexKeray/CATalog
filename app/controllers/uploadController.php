@@ -11,22 +11,7 @@ class UploadController extends BaseController
 
     public function uploadShow()
     {
-        //$this->assignUser();
-
-        // if ($this->user === null) {
-        //     $this->redirect(BASE_URL . '/login.php');
-        //     return;
-        // }
-
         $this->authorise();
-
-        // try {
-        //     $stmt = $this->pdo->query('SELECT id, name FROM genres ORDER BY name');
-        //     $genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        //     $this->smarty->assign('genres', $genres);
-        // } catch (PDOException $e) {
-        //     $this->printException($e);
-        // }
 
         $this->laodTypes();
         $this->laodGenres();
@@ -37,20 +22,21 @@ class UploadController extends BaseController
 
     public function uploadExecute()
     {
-        //$this->assignUser();
-
-        // if ($this->user === null) {
-        //     $this->redirect(BASE_URL . '/login.php');
-        //     return;
-        // }
 
         $this->authorise();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $typeId = $_POST['type'] ?? '';
+            $typeId = $_POST['type-id'] ?? '';
+
+            $typeStmt = $this->pdo->prepare('SELECT name FROM types WHERE id = ?');
+            $typeStmt->execute([$typeId]);
+            $typeRecord = $typeStmt->fetch();
+            $typeName = $typeRecord ? $typeRecord['name'] : '';
+
             $genreId = $_POST['genre'] ?? '';
             $name = trim($_POST['name'] ?? '');
             $year = $_POST['year'] ?? '';
+            $episodesCount = ($typeName === 'Сериал' && isset($_POST['episodes_count'])) ? (int)$_POST['episodes_count'] : 0;
             $duration = $_POST['duration'] ?? '';
 
             if (empty($genreId) || empty($name) || empty($year) || empty($duration)) {
@@ -76,22 +62,25 @@ class UploadController extends BaseController
 
             try {
                 $stmt = $this->pdo->prepare('
-                    INSERT INTO media (type_id, genre_id, name, image_path, year, duration, user_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO media (type_id, genre_id, name, image_path, year, episodes_count, duration, user_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 ');
+                
+
                 $stmt->execute([
                     $typeId,
                     $genreId,
                     $name,
                     $imagePath,
                     $year,
+                    $episodesCount,
                     $duration,
                     $this->user['id']
                 ]);
 
                 $this->setAlert(Alert::MovieAddedSuccessfull, AlertType::Success);
 
-                $this->redirect(BASE_URL . '/home.php');
+                $this->redirect(BASE_URL . '/personal-media.php');
 
             } catch (PDOException $e) {
                 $this->printException($e);

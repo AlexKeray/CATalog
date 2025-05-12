@@ -1,4 +1,4 @@
-{extends file="layout.tpl"}
+{extends file="common/layout.tpl"}
 
 {block name="content"}
 
@@ -15,10 +15,13 @@
             {foreach from=$media item=mediaItem}
                 <div style="margin-bottom: 30px;">
                     <h3>{$mediaItem.name}</h3>
+                    <p>Тип: {$mediaItem.type_name}</p>
                     <p>Жанр: {$mediaItem.genre_name}</p>
                     <p>Година: {$mediaItem.year}</p>
+                    {if $mediaItem.type_name == "Сериал"}
+                        <p>Брой епизоди: {$mediaItem.episodes_count}</p>
+                    {/if}
                     <p>Продължителност: {$mediaItem.duration} минути</p>
-
                     {if $mediaItem.image_path}
                         <img src="{$mediaItem.image_path}" alt="Постер" style="max-width: 200px;">
                     {/if}

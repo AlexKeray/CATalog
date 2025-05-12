@@ -76,6 +76,30 @@ class Router {
                     echo "Страницата не съществува.";
                 }
                 break;
+            case '/personal-media.php':
+                require BASE_PATH . '/app/controllers/mediaController.php';
+                $controller = new MediaController($this->smarty, $this->pdo);
+
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $controller->personalMediaShow();
+                }
+                else {
+                    http_response_code(405);
+                    echo "Страницата не съществува.";
+                }
+                break;
+            case '/delete.php':
+                require BASE_PATH . '/app/controllers/deleteController.php';
+                $controller = new DeleteController($this->smarty, $this->pdo);
+
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $controller->deleteExecute();
+                }
+                else {
+                    http_response_code(405);
+                    echo "Страницата не съществува.";
+                }
+                break;
             default:
                 http_response_code(404);
                 echo "Страницата не съществува.";

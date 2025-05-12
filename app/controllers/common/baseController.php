@@ -11,6 +11,7 @@ class BaseController
         $this->pdo = $pdo;
 
         $this->smarty->assign('base_path', BASE_PATH);
+        $this->smarty->assign('base_url', BASE_URL);
 
         $this->assignUser();
 
@@ -24,9 +25,7 @@ class BaseController
     }
 
     protected function assignUser() // извлича потребителя от сесията и го присвоява на полето $user на този контролер (родителския на останалите)
-    {
-        // $this->user['id'] = $_SESSION['id'] ?? null;
-        // $this->user['username'] = $_SESSION['username'] ?? null;    
+    {   
         $this->user = [
             'id' => $_SESSION['user']['id'] ?? null,
             'username' => $_SESSION['user']['username'] ?? null

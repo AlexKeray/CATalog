@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-12 13:21:22
-  from 'file:layout.tpl' */
+/* Smarty version 5.4.5, created on 2025-05-12 13:49:13
+  from 'file:common/layout.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_6821d9b20c0537_64795916',
+  'unifunc' => 'content_6821e039b55ff5_26791470',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
-    'e43386b114cd7a619b3d0760c1511397ad3e3644' => 
+    '3fd83d0f29280d0e98b695139a98d0a0230ae8c8' => 
     array (
-      0 => 'layout.tpl',
-      1 => 1747048878,
+      0 => 'common/layout.tpl',
+      1 => 1747050231,
       2 => 'file',
     ),
   ),
@@ -20,8 +20,8 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6821d9b20c0537_64795916 (\Smarty\Template $_smarty_tpl) {
-$_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
+function content_6821e039b55ff5_26791470 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views\\common';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 ?>
 <!DOCTYPE html>
@@ -43,12 +43,16 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
         <li><a href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /home.php">Начало</a></li>
         <?php if ((true && (true && null !== ($_smarty_tpl->getValue('user')['id'] ?? null)))) {?>
-            <li><a href="http://localhost/CATalog/personal-media.php">Лична колекция</a></li>
-            <li><a href="http://localhost/CATalog/logout.php">Изход (<?php echo ($_smarty_tpl->getValue('user')['username']);?>
+            <li><a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/personal-media.php">Лична колекция</a></li>
+            <li><a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/logout.php">Изход (<?php echo ($_smarty_tpl->getValue('user')['username']);?>
 )</a></li>
         <?php } else { ?>
-            <li><a href="http://localhost/CATalog/login.php">Вход</a></li>
-            <li><a href="http://localhost/CATalog/register.php">Регистрация</a></li>
+            <li><a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/login.php">Вход</a></li>
+            <li><a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/register.php">Регистрация</a></li>
         <?php }?>
     </ul>
 </nav>
@@ -84,18 +88,34 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 <?php }?>
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3655551696821d9b20beb12_78820122', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6289886806821e039b53b16_15975090', "content");
+?>
+
+
+<?php echo '<script'; ?>
+ src="https://code.jquery.com/jquery-3.6.0.min.js"><?php echo '</script'; ?>
+>
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16174790916821e039b55028_77149053', "scripts");
 ?>
 
 
 </body>
 </html><?php }
 /* {block "content"} */
-class Block_3655551696821d9b20beb12_78820122 extends \Smarty\Runtime\Block
+class Block_6289886806821e039b53b16_15975090 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
-$_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views\\common';
 }
 }
 /* {/block "content"} */
+/* {block "scripts"} */
+class Block_16174790916821e039b55028_77149053 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views\\common';
+}
+}
+/* {/block "scripts"} */
 }

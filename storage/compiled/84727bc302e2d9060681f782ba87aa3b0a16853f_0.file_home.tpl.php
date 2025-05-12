@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-12 10:33:45
+/* Smarty version 5.4.5, created on 2025-05-12 16:28:48
   from 'file:home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_6821b269d9cd13_28701770',
+  'unifunc' => 'content_682205a08b0882_43297285',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '84727bc302e2d9060681f782ba87aa3b0a16853f' => 
     array (
       0 => 'home.tpl',
-      1 => 1747038807,
+      1 => 1747060106,
       2 => 'file',
     ),
   ),
@@ -20,20 +20,20 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6821b269d9cd13_28701770 (\Smarty\Template $_smarty_tpl) {
+function content_682205a08b0882_43297285 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8731173226821b269d7c773_09126448', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_475576241682205a0876055_09636372', "content");
 ?>
 
-<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "layout.tpl", $_smarty_current_dir);
+<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_8731173226821b269d7c773_09126448 extends \Smarty\Runtime\Block
+class Block_475576241682205a0876055_09636372 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
@@ -59,13 +59,18 @@ $foreach0DoElse = false;
                 <div style="margin-bottom: 30px;">
                     <h3><?php echo $_smarty_tpl->getValue('mediaItem')['name'];?>
 </h3>
+                    <p>Тип: <?php echo $_smarty_tpl->getValue('mediaItem')['type_name'];?>
+</p>
                     <p>Жанр: <?php echo $_smarty_tpl->getValue('mediaItem')['genre_name'];?>
 </p>
                     <p>Година: <?php echo $_smarty_tpl->getValue('mediaItem')['year'];?>
 </p>
+                    <?php if ($_smarty_tpl->getValue('mediaItem')['type_name'] == "Сериал") {?>
+                        <p>Брой епизоди: <?php echo $_smarty_tpl->getValue('mediaItem')['episodes_count'];?>
+</p>
+                    <?php }?>
                     <p>Продължителност: <?php echo $_smarty_tpl->getValue('mediaItem')['duration'];?>
  минути</p>
-
                     <?php if ($_smarty_tpl->getValue('mediaItem')['image_path']) {?>
                         <img src="<?php echo $_smarty_tpl->getValue('mediaItem')['image_path'];?>
 " alt="Постер" style="max-width: 200px;">
