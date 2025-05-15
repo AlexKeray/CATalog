@@ -81,5 +81,18 @@ class BaseController
         exit;
     }
 
+    protected function debug($data)
+    {
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+        exit;
+    }
+
+    protected function nullIfEmpty($value)
+    {
+        return $value === '' ? null : $value;
+    }
+
 }
 ?>

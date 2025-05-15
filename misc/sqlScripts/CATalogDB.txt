@@ -12,8 +12,7 @@ CREATE TABLE users (
 
 CREATE TABLE genres (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT
+    name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE types (
@@ -28,19 +27,19 @@ CREATE TABLE media (
     type_id INT NOT NULL,
     user_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
-    image_path VARCHAR(255),
-    year INT NOT NULL,
-    duration INT NOT NULL,
-    episodes_count INT NOT NULL DEFAULT 0,
+    image_path VARCHAR(255) NULL,
+    year INT NULL,
+    duration INT NULL,
+    episodes_count INT NULL,
     FOREIGN KEY (genre_id) REFERENCES genres(id),
     FOREIGN KEY (type_id) REFERENCES types(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-INSERT INTO genres (name, description)
+INSERT INTO genres (name)
 VALUES 
-('Аниме', 'Жанр с японска анимация'),
-('Комедия', 'Жанр със забавни и хумористични елементи');
+('Аниме'),
+('Комедия');
 
 INSERT INTO types (name, description)
 VALUES 

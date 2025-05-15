@@ -1,7 +1,3 @@
-{extends file="common/layout.tpl"}
-
-{block name="content"}
-<h2>Добави Филм/Сериал</h2>
 
 <form action="{$base_url}/upload.php" method="post" enctype="multipart/form-data">
     <label>Тип:</label>
@@ -12,48 +8,37 @@
         {/foreach}
     </select><br><br>
     <label>Жанр:</label>
-    <select name="genre" required>
+    <select name="genre" id="genre-select" required>
         <option value="">Избери жанр</option>
         {foreach from=$genres item=genre}
             <option value="{$genre.id}">{$genre.name}</option>
         {/foreach}
+        <option value="other">Друго</option>
     </select><br><br>
 
+    <div id="custom-genre-wrapper" style="display: none;">
+        <label for="custom_genre_name">Нов жанр:</label>
+        <input type="text" name="custom_genre_name" id="custom_genre_name"><br><br>
+    </div>
+
     <label>Име:</label>
-    <input type="text" name="name" ><br><br>
+    <input type="text" name="name" id="name" required><br><br>
 
     <label>Снимка:</label>
-    <input type="file" name="image" accept="image/*"><br><br> {* accept="image/*" позволява качване само на файлове като .jpg, .png, .gif, .webp и други изображения. *}
+    <input type="file" name="image" id="image" accept="image/*"><br><br> {* accept="image/*" позволява качване само на файлове като .jpg, .png, .gif, .webp и други изображения. *}
 
     <label>Година:</label>
-    <input type="number" name="year" min="1800" max="2100" required><br><br>
+    <input type="number" name="year" id="year" min="1800" max="2100"><br><br>
 
-    <div id="episodes-container"></div>
+    <div id="episodes-wrapper" style="display: none;">
+        <label for="episodes_count">Брой епизоди:</label>
+        <input type="number" name="episodes_count" id="episodes_count" min="1"><br><br>
+    </div>
+
 
     <label>Продължителност (в минути):</label>
-    <input type="number" name="duration" min="1" required><br><br>
+    <input type="number" name="duration" id="duration" min="1"><br><br>
 
     <button type="submit">Качи</button>
 </form>
 
-{/block}
-
-{block name="scripts"}
-<script>
-$(function () {
-    $('#type-select').on('change', function () {
-        const selected = $(this).val();
-
-        if ($(this).find("option:selected").text() === 'Сериал') {
-            $('#episodes-container').html(`
-                <label for="episodes_count">Брой епизоди:</label>
-                <input type="number" name="episodes_count" id="episodes_count" class="form-control" min="1">
-            `);
-        } else {
-            $('#episodes-container').empty();
-        }
-    });
-});
-</script>
-
-{/block}

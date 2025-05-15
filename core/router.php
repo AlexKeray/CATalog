@@ -62,11 +62,11 @@ class Router {
                 }
                 break;
             case '/upload.php':
-                require BASE_PATH . '/app/controllers/uploadController.php';
-                $controller = new UploadController($this->smarty, $this->pdo);
+                require BASE_PATH . '/app/controllers/mediaController.php';
+                $controller = new MediaController($this->smarty, $this->pdo);
 
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                    $controller->uploadShow();
+                    $controller->personalMediaShow();
                 }
                 else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $controller->uploadExecute();
@@ -77,7 +77,7 @@ class Router {
                 }
                 break;
             case '/personal-media.php':
-                require BASE_PATH . '/app/controllers/mediaController.php';
+                require_once BASE_PATH . '/app/controllers/mediaController.php';
                 $controller = new MediaController($this->smarty, $this->pdo);
 
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -98,6 +98,27 @@ class Router {
                 else {
                     http_response_code(405);
                     echo "Страницата не съществува.";
+                }
+                break;
+            case '/search.php':
+                require BASE_PATH . '/app/controllers/searchController.php';
+                $controller = new SearchController($this->smarty, $this->pdo);
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $controller->searchExecute();
+                }
+                else {
+                    http_response_code(405);
+                    echo "Страницата не съществува.";
+                }
+                break;
+            case '/searchAjax':
+                require BASE_PATH . '/app/controllers/searchController.php';
+                $controller = new SearchController($this->smarty, $this->pdo);
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $controller->searchAjaxExecute();
+                }
+                else {
+                    http_response_code(405);
                 }
                 break;
             default:

@@ -1,11 +1,11 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-12 13:49:13
+/* Smarty version 5.4.5, created on 2025-05-13 14:16:08
   from 'file:common/layout.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_6821e039b55ff5_26791470',
+  'unifunc' => 'content_68233808c875d0_01064302',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6821e039b55ff5_26791470 (\Smarty\Template $_smarty_tpl) {
+function content_68233808c875d0_01064302 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views\\common';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 ?>
@@ -88,7 +88,7 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 <?php }?>
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6289886806821e039b53b16_15975090', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_107900680868233808c84801_59727597', "content");
 ?>
 
 
@@ -96,14 +96,14 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6289886806821
  src="https://code.jquery.com/jquery-3.6.0.min.js"><?php echo '</script'; ?>
 >
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16174790916821e039b55028_77149053', "scripts");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_91126542568233808c868d2_66382506', "scripts");
 ?>
 
 
 </body>
 </html><?php }
 /* {block "content"} */
-class Block_6289886806821e039b53b16_15975090 extends \Smarty\Runtime\Block
+class Block_107900680868233808c84801_59727597 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views\\common';
@@ -111,7 +111,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views\\common';
 }
 /* {/block "content"} */
 /* {block "scripts"} */
-class Block_16174790916821e039b55028_77149053 extends \Smarty\Runtime\Block
+class Block_91126542568233808c868d2_66382506 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views\\common';
