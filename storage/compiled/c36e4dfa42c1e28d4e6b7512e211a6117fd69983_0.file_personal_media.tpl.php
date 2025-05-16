@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-16 07:39:17
+/* Smarty version 5.4.5, created on 2025-05-16 10:12:26
   from 'file:personal_media.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_6826cf85414357_73305468',
+  'unifunc' => 'content_6826f36a00a155_58934617',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c36e4dfa42c1e28d4e6b7512e211a6117fd69983' => 
     array (
       0 => 'personal_media.tpl',
-      1 => 1747373954,
+      1 => 1747382678,
       2 => 'file',
     ),
   ),
@@ -21,23 +21,23 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
     'file:upload.tpl' => 1,
   ),
 ))) {
-function content_6826cf85414357_73305468 (\Smarty\Template $_smarty_tpl) {
+function content_6826f36a00a155_58934617 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4550184776826cf853d4fc5_22180274', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19633955496826f369f09b00_71468523', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9215145926826cf8540f796_68216457', "scripts");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8422573976826f36a005b48_21546440', "scripts");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_4550184776826cf853d4fc5_22180274 extends \Smarty\Runtime\Block
+class Block_19633955496826f369f09b00_71468523 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
@@ -89,6 +89,11 @@ $foreach0DoElse = false;
 ">
                 Изтрий
             </button>
+            <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/edit/<?php echo $_smarty_tpl->getValue('mediaItem')['id'];?>
+" method="get" style="display: inline;">
+                <button class="btn btn-warning btn-sm">Промени</button>
+            </form>
             <p>Тип: <?php echo $_smarty_tpl->getValue('mediaItem')['type_name'];?>
 </p>
             <p>Жанр: <?php echo $_smarty_tpl->getValue('mediaItem')['genre_name'];?>
@@ -119,7 +124,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);
 }
 /* {/block "content"} */
 /* {block "scripts"} */
-class Block_9215145926826cf8540f796_68216457 extends \Smarty\Runtime\Block
+class Block_8422573976826f36a005b48_21546440 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';

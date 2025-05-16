@@ -37,6 +37,9 @@
             <button class="btn btn-danger btn-sm delete-media" data-id="{$mediaItem.id}">
                 Изтрий
             </button>
+            <form action="{$base_url}/edit/{$mediaItem.id}" method="get" style="display: inline;">
+                <button class="btn btn-warning btn-sm">Промени</button>
+            </form>
             <p>Тип: {$mediaItem.type_name}</p>
             <p>Жанр: {$mediaItem.genre_name}</p>
             <p>Година: {$mediaItem.year != '' ? $mediaItem.year : '-'}</p>

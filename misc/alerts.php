@@ -19,6 +19,7 @@ enum Alert: string
     case SeriesAddedSuccessfull = 'Сериалът е добавен успешно!';
     case EmptyRequiredFields = 'Има празни задължителни полета!';
     case InvalidGenre = 'Невалиден жанр!';
+    case MovieEditedSuccessfull = 'Филмът е редактиран успешно!';
 }
 
 ?>

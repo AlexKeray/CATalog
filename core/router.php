@@ -132,6 +132,17 @@ class Router {
                     echo "Страницата не съществува.";
                 }
                 break;
+            case (preg_match('#^/edit/(\d+)$#', $pageUri, $matches) ? true : false):
+                require BASE_PATH . '/app/controllers/mediaController.php';
+                $controller = new MediaController($this->smarty, $this->pdo);
+                $controller->editShow((int)$matches[1]);
+                break;
+
+            case '/edit.php':
+                require BASE_PATH . '/app/controllers/mediaController.php';
+                $controller = new MediaController($this->smarty, $this->pdo);
+                $controller->editExecute();
+                break;
             default:
                 http_response_code(404);
                 echo "Страницата не съществува.";

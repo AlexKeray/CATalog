@@ -154,6 +154,79 @@ class MediaController extends BaseController
         }
     }
 
+    public function editShow($mediaId)
+    {
+        $this->authorise();
+
+        try {
+            $stmt = $this->pdo->prepare('SELECT * FROM media WHERE id = ? AND user_id = ?');
+            $stmt->execute([$mediaId, $this->user['id']]);
+        } catch (PDOException $e) {
+            $this->printException($e);
+            return;
+        }
+        $media = $stmt->fetch();
+
+        $this->smarty->assign('media', $media);
+        $this->laodTypes();
+        $this->laodGenres();
+
+        $this->smarty->display('edit.tpl');
+    }
+
+    public function editExecute()
+    {
+        $this->authorise();
+
+        $id = $_POST['media_id'] ?? null;
+        $name = trim($_POST['name'] ?? '');
+        $type = $_POST['type-id'] ?? null;
+        $genre = $_POST['genre'] ?? null;
+        $year = $_POST['year'] ?? null;
+        $duration = $_POST['duration'] ?? null;
+        $episodes = $_POST['episodes_count'] ?? null;
+        $episodes = $this->nullIfEmpty($episodes);
+
+         // Вземаме текущата снимка от базата
+        $stmt = $this->pdo->prepare("SELECT image_path FROM media WHERE id = ? AND user_id = ?");
+        $stmt->execute([$id, $this->user['id']]);
+        $current = $stmt->fetch();
+        $imagePath = $current ? $current['image_path'] : null;
+
+        // Ако има нова снимка – качваме я
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = BASE_PATH . '/storage/images/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $fileName = uniqid() . '_' . basename($_FILES['image']['name']);
+            $fullPath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
+                $imagePath = 'storage/images/' . $fileName;
+            }
+        }
+
+        try {
+            $stmt = $this->pdo->prepare("
+                UPDATE media 
+                SET name = ?, type_id = ?, genre_id = ?, year = ?, duration = ?, episodes_count = ?, image_path = ?
+                WHERE id = ? AND user_id = ?
+            ");
+
+            $stmt->execute([
+                $name, $type, $genre, $year, $duration, $episodes, $imagePath, $id, $this->user['id']
+            ]);
+        } catch (Exception $e) {
+            $this->printException($e);
+            return;
+        }
+
+        $this->setAlert(Alert::MovieEditedSuccessfull, AlertType::Success);
+        $this->redirect(BASE_URL . '/personal-media.php');
+    }
+
     // public function searchExecute()
     // {
     //     $query = $_GET['query'] ?? '';
