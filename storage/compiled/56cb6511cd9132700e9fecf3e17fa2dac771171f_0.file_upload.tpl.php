@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-15 08:07:17
+/* Smarty version 5.4.5, created on 2025-05-15 10:24:48
   from 'file:upload.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_68258495dcf624_76000081',
+  'unifunc' => 'content_6825a4d0ab93a9_59804375',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '56cb6511cd9132700e9fecf3e17fa2dac771171f' => 
     array (
       0 => 'upload.tpl',
-      1 => 1747288975,
+      1 => 1747297198,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68258495dcf624_76000081 (\Smarty\Template $_smarty_tpl) {
+function content_6825a4d0ab93a9_59804375 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 ?>
 <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
@@ -69,6 +69,8 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
     <label>Снимка:</label>
     <input type="file" name="image" id="image" accept="image/*"><br><br> 
+    <input type="hidden" name="poster_url" id="poster_url">
+
     <label>Година:</label>
     <input type="number" name="year" id="year" min="1800" max="2100"><br><br>
 

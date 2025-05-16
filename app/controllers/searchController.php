@@ -38,6 +38,9 @@ class SearchController extends BaseController
 
         header('Content-Type: text/html; charset=utf-8');
 
+        //echo json_encode($results, JSON_UNESCAPED_UNICODE);
+        //exit;
+
         foreach ($results as $r) {
             ob_start(); // буферираме съдържанието
 

@@ -27,6 +27,8 @@
     <label>Снимка:</label>
     <input type="file" name="image" id="image" accept="image/*"><br><br> {* accept="image/*" позволява качване само на файлове като .jpg, .png, .gif, .webp и други изображения. *}
 
+    <input type="hidden" name="poster_url" id="poster_url">
+
     <label>Година:</label>
     <input type="number" name="year" id="year" min="1800" max="2100"><br><br>
 

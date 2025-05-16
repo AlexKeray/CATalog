@@ -15,6 +15,9 @@
     <form id="tmdb-search-form" style="margin-bottom: 10px;">
         <input type="text" id="tmdb-query" placeholder="Търси заглавие..." required>
         <button type="submit">Търси</button>
+        <div id="spinner" style="display: none; text-align: center; margin-top: 10px;">
+            <img src="{$base_url}/misc/loading.gif" alt="Зареждане..." width="50">
+        </div>
     </form>
 
     <div id="search-results"></div>
@@ -100,8 +103,13 @@
             e.preventDefault();
             const query = $('#tmdb-query').val();
 
+            $('#spinner').show();         // Покажи спинъра
+            $('#search-results').empty(); // Изчисти предишни резултати
+
             $.get('{$base_url}/searchAjax', { query }, function (data) {
                 $('#search-results').html(data);
+            }).always(function () {
+                $('#spinner').hide();     // Скрий спинъра при успех или грешка
             });
         });
     }
@@ -143,6 +151,9 @@
             } else {
                 $('#episodes-container').empty();
             }
+
+            const posterUrl = btn.data('poster');
+            $('#poster_url').val(posterUrl);
         });
     }
 

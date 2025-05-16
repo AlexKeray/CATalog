@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-15 09:41:34
+/* Smarty version 5.4.5, created on 2025-05-15 10:39:38
   from 'file:personal_media.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_68259aae1deb40_15806415',
+  'unifunc' => 'content_6825a84a7d5986_39702581',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c36e4dfa42c1e28d4e6b7512e211a6117fd69983' => 
     array (
       0 => 'personal_media.tpl',
-      1 => 1747294891,
+      1 => 1747298374,
       2 => 'file',
     ),
   ),
@@ -21,23 +21,23 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
     'file:upload.tpl' => 1,
   ),
 ))) {
-function content_68259aae1deb40_15806415 (\Smarty\Template $_smarty_tpl) {
+function content_6825a84a7d5986_39702581 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_94007700468259aae1a62f7_55612368', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17448040676825a84a7a2623_07741586', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_48085758168259aae1db212_98477050', "scripts");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4385920146825a84a7d1963_23271972', "scripts");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_94007700468259aae1a62f7_55612368 extends \Smarty\Runtime\Block
+class Block_17448040676825a84a7a2623_07741586 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
@@ -58,6 +58,10 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
     <form id="tmdb-search-form" style="margin-bottom: 10px;">
         <input type="text" id="tmdb-query" placeholder="Търси заглавие..." required>
         <button type="submit">Търси</button>
+        <div id="spinner" style="display: none; text-align: center; margin-top: 10px;">
+            <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
+/misc/loading.gif" alt="Зареждане..." width="50">
+        </div>
     </form>
 
     <div id="search-results"></div>
@@ -112,7 +116,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);
 }
 /* {/block "content"} */
 /* {block "scripts"} */
-class Block_48085758168259aae1db212_98477050 extends \Smarty\Runtime\Block
+class Block_4385920146825a84a7d1963_23271972 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
@@ -166,9 +170,14 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
             e.preventDefault();
             const query = $('#tmdb-query').val();
 
+            $('#spinner').show();         // Покажи спинъра
+            $('#search-results').empty(); // Изчисти предишни резултати
+
             $.get('<?php echo $_smarty_tpl->getValue('base_url');?>
 /searchAjax', { query }, function (data) {
                 $('#search-results').html(data);
+            }).always(function () {
+                $('#spinner').hide();     // Скрий спинъра при успех или грешка
             });
         });
     }
@@ -210,6 +219,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
             } else {
                 $('#episodes-container').empty();
             }
+
+            const posterUrl = btn.data('poster');
+            $('#poster_url').val(posterUrl);
         });
     }
 

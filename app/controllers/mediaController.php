@@ -92,6 +92,9 @@ class MediaController extends BaseController
                 return;
             }
 
+            $posterUrl = $_POST['poster_url'] ?? null;
+            $posterUrl = $this->nullIfEmpty($posterUrl);
+
             $imagePath = null;
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = BASE_PATH . '/storage/images/';
@@ -103,6 +106,19 @@ class MediaController extends BaseController
                 $fullPath = $uploadDir . $fileName;
 
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
+                    $imagePath = 'storage/images/' . $fileName;
+                }
+            }
+            elseif ($posterUrl) {
+                $uploadDir = BASE_PATH . '/storage/images/';
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+                $imageData = @file_get_contents($posterUrl);
+                if ($imageData) {
+                    $extension = pathinfo(parse_url($posterUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
+                    $fileName = uniqid() . '.' . ($extension ?: 'jpg');
+                    $fullPath = $uploadDir . $fileName;
+                    file_put_contents($fullPath, $imageData);
                     $imagePath = 'storage/images/' . $fileName;
                 }
             }
@@ -138,21 +154,21 @@ class MediaController extends BaseController
         }
     }
 
-    public function searchExecute()
-    {
-        $query = $_GET['query'] ?? '';
-        $results = [];
+    // public function searchExecute()
+    // {
+    //     $query = $_GET['query'] ?? '';
+    //     $results = [];
 
-        if ($query !== '') {
-            $token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZjNlMGQ3N2QyZTk4OTM4NjE2NmIxNDU3ODljYjhlOCIsIm5iZiI6MS43NDcwODMxMDIyNjU5OTk4ZSs5LCJzdWIiOiI2ODIyNWY1ZTcxZTMwMjNmZjFhMTY2MTUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.c-ulm2_OoZACessEr_7LIYlDFVDATkIj8zVIQCw_F_Y';
-            $searchUrl = 'https://api.themoviedb.org/3/search/multi?query=' . urlencode($query) . '&page=1';
-            $results = $this->searchTmdb($searchUrl, $token);
-        }
+    //     if ($query !== '') {
+    //         $token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZjNlMGQ3N2QyZTk4OTM4NjE2NmIxNDU3ODljYjhlOCIsIm5iZiI6MS43NDcwODMxMDIyNjU5OTk4ZSs5LCJzdWIiOiI2ODIyNWY1ZTcxZTMwMjNmZjFhMTY2MTUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.c-ulm2_OoZACessEr_7LIYlDFVDATkIj8zVIQCw_F_Y';
+    //         $searchUrl = 'https://api.themoviedb.org/3/search/multi?query=' . urlencode($query) . '&page=1';
+    //         $results = $this->searchTmdb($searchUrl, $token);
+    //     }
 
-        $this->smarty->assign('search_results', $results);
-        $this->smarty->assign('search_query', $query);
-        $this->smarty->display('search_results.tpl');
-    }
+    //     $this->smarty->assign('search_results', $results);
+    //     $this->smarty->assign('search_query', $query);
+    //     $this->smarty->display('search_results.tpl');
+    // }
 
     private function laodGenres()
     {
