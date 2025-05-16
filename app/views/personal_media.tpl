@@ -5,6 +5,8 @@
 
 <h2>Лична колекция</h2>
 
+<a href="{$base_url}/exportExcel" class="btn btn-success">Експортирай в Excel</a>
+
 <button id="toggle-add-form">+ Добави филм/сериал</button>
 
 <div id="add-form-wrapper" style="display: none;">

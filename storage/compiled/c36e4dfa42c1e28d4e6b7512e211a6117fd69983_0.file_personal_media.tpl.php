@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-15 10:39:38
+/* Smarty version 5.4.5, created on 2025-05-16 07:39:17
   from 'file:personal_media.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_6825a84a7d5986_39702581',
+  'unifunc' => 'content_6826cf85414357_73305468',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c36e4dfa42c1e28d4e6b7512e211a6117fd69983' => 
     array (
       0 => 'personal_media.tpl',
-      1 => 1747298374,
+      1 => 1747373954,
       2 => 'file',
     ),
   ),
@@ -21,23 +21,23 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
     'file:upload.tpl' => 1,
   ),
 ))) {
-function content_6825a84a7d5986_39702581 (\Smarty\Template $_smarty_tpl) {
+function content_6826cf85414357_73305468 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17448040676825a84a7a2623_07741586', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4550184776826cf853d4fc5_22180274', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4385920146825a84a7d1963_23271972', "scripts");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9215145926826cf8540f796_68216457', "scripts");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_17448040676825a84a7a2623_07741586 extends \Smarty\Runtime\Block
+class Block_4550184776826cf853d4fc5_22180274 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
@@ -46,6 +46,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 
 
 <h2>Лична колекция</h2>
+
+<a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/exportExcel" class="btn btn-success">Експортирай в Excel</a>
 
 <button id="toggle-add-form">+ Добави филм/сериал</button>
 
@@ -116,7 +119,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);
 }
 /* {/block "content"} */
 /* {block "scripts"} */
-class Block_4385920146825a84a7d1963_23271972 extends \Smarty\Runtime\Block
+class Block_9215145926826cf8540f796_68216457 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';

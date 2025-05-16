@@ -1,0 +1,8 @@
+In php.ini
+find
+;extension=gd
+;extension=zip
+and uncomment them.
+
+then in the project folder run
+composer require phpoffice/phpspreadsheet

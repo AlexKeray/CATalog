@@ -121,6 +121,17 @@ class Router {
                     http_response_code(405);
                 }
                 break;
+            case '/exportExcel':
+                require BASE_PATH . '/app/controllers/exportExcelController.php';
+                $controller = new ExportExcelController($this->smarty, $this->pdo);
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $controller->exportExecute();
+                }
+                else {
+                    http_response_code(405);
+                    echo "Страницата не съществува.";
+                }
+                break;
             default:
                 http_response_code(404);
                 echo "Страницата не съществува.";
