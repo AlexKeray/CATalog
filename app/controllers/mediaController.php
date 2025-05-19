@@ -246,7 +246,7 @@ class MediaController extends BaseController
     private function laodGenres()
     {
         try {
-            $stmt = $this->pdo->query('SELECT id, name FROM genres ORDER BY name');
+            $stmt = $this->pdo->query('SELECT id, name, description FROM genres ORDER BY name');
             $genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $this->smarty->assign('genres', $genres);
         } catch (PDOException $e) {

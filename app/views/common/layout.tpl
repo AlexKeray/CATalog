@@ -51,6 +51,8 @@
     </div>
 {/if}
 
+<div id="genre-alert-placeholder"></div>
+
 {* Основно съдържание тук *}
 {block name="content"}{/block}
 

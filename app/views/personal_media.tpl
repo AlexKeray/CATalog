@@ -5,9 +5,11 @@
 
 <h2>Лична колекция</h2>
 
-<a href="{$base_url}/exportExcel" class="btn btn-success">Експортирай в Excel</a>
-
 <button id="toggle-add-form">+ Добави филм/сериал</button>
+
+<button id="toggle-genre-form" class="btn btn-secondary">+ Редактирай/добави жанр</button>
+
+<a href="{$base_url}/exportExcel" class="btn btn-success">Експортирай в Excel</a>
 
 <div id="add-form-wrapper" style="display: none;">
     {include file="upload.tpl"}
@@ -23,6 +25,11 @@
     </form>
 
     <div id="search-results"></div>
+
+</div>
+
+<div id="genre-form-wrapper" style="display: none;">
+    {include file="editGenre.tpl"}
 </div>
 
 {if isset($media) && $media|@count > 0}  {* $media|@count брои колко елемента има в $media *}
@@ -63,6 +70,16 @@
 {block name="scripts"}
 
 <script>
+
+    function showGenreAlert(message, type = 'success') {
+        const html = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
+        message +
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Затвори"></button>' +
+        '</div>';
+
+        $('#genre-alert-placeholder').html(html);
+    }
+
     function handleToggleUploadForm() {
 
         $('#toggle-add-form').on('click', function () {
@@ -101,6 +118,87 @@
                 }
             });
     }
+
+    function handleToggleGenreForm() {
+        $('#toggle-genre-form').on('click', function () {
+            const wrapper = $('#genre-form-wrapper');
+            const isVisible = wrapper.is(':visible');
+            wrapper.slideToggle(200);
+            $(this).text(isVisible ? '+ Редактирай/добави жанр' : '- Редактирай/добави жанр');
+        });
+
+        $('#genre-select-main').on('change', function () {
+            const selected = $(this).find('option:selected'); 
+            const value = $(this).val();
+
+            if (value === 'new') {
+                $('#new-genre-fields').slideDown(150);
+                $('#create-genre-btn').show();
+                $('#edit-genre-btn, #delete-genre-btn').hide();
+                $('input[name="genre_name"]').val('');
+                $('textarea[name="genre_description"]').val('');
+            } else if (value !== '') {
+                $('#new-genre-fields').slideDown(150);
+                $('#create-genre-btn').hide();
+                $('#edit-genre-btn, #delete-genre-btn').show();
+                const name = selected.data('name') || '';
+                const desc = selected.data('description') || '';
+                $('input[name="genre_name"]').val(name);
+                $('textarea[name="genre_description"]').val(desc);
+            } else {
+                $('#new-genre-fields').slideUp(150);
+                $('#create-genre-btn, #edit-genre-btn, #delete-genre-btn').hide();
+                $('input[name="genre_name"]').val('');
+                $('textarea[name="genre_description"]').val('');
+            }
+        });
+
+        $('#create-genre-btn').on('click', function () {
+        const name = $('input[name="genre_name"]').val();
+        const description = $('textarea[name="genre_description"]').val();
+
+        $.post('{$base_url}/genre_create.php', { name, description }, function (res) {
+            location.reload();
+            sessionStorage.setItem('genreMessage', res.message);
+            sessionStorage.setItem('genreMessageType', 'success');
+        }, 'json');
+        });
+
+        $('#edit-genre-btn').on('click', function () {
+            const id = $('#genre-select-main').val();
+            const name = $('input[name="genre_name"]').val();
+            const description = $('textarea[name="genre_description"]').val();
+
+            $.post('{$base_url}/genre_edit.php', { id, name, description }, function (res) {
+                sessionStorage.setItem('genreMessage', res.message);
+                sessionStorage.setItem('genreMessageType', 'success');
+                location.reload();
+            }, 'json');
+        });
+
+
+
+        $('#delete-genre-btn').on('click', function () {
+            const id = $('#genre-select-main').val();
+
+            if (!confirm('Сигурен ли си, че искаш да изтриеш този жанр?')) return;
+
+            $.post('{$base_url}/genre_delete.php', { id }, function (res) {
+                sessionStorage.setItem('genreMessage', res.message);
+                sessionStorage.setItem('genreMessageType', 'success');
+                location.reload();
+            }, 'json').fail(function (xhr) {
+                try {
+                    const res = JSON.parse(xhr.responseText);
+                    showGenreAlert(res.message, 'danger');
+                } catch {
+                    showGenreAlert('Възникна грешка при изтриването.', 'danger');
+                }
+            });
+        });
+
+    }
+
 
     function handleTMDbQueryAjax() {
 
@@ -187,11 +285,22 @@
 
     $(function () {
 
+        const message = sessionStorage.getItem('genreMessage');
+        const type = sessionStorage.getItem('genreMessageType');
+
+        if (message) {
+            showGenreAlert(message, type || 'success');
+            sessionStorage.removeItem('genreMessage');
+            sessionStorage.removeItem('genreMessageType');
+        }
+
         handleToggleUploadForm();
 
         handleToggleEpisodesInput();
 
         handleToggleNewGenreInput();
+
+        handleToggleGenreForm();
 
         handleTMDbQueryAjax();
     

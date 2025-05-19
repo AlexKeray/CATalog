@@ -143,6 +143,23 @@ class Router {
                 $controller = new MediaController($this->smarty, $this->pdo);
                 $controller->editExecute();
                 break;
+            case '/genre_create.php':
+                require BASE_PATH . '/app/controllers/GenreController.php';
+                $controller = new GenreController($this->smarty, $this->pdo);
+                $controller->createExecute();
+                break;
+
+            case '/genre_edit.php':
+                require BASE_PATH . '/app/controllers/GenreController.php';
+                $controller = new GenreController($this->smarty, $this->pdo);
+                $controller->editExecute();
+                break;
+
+            case '/genre_delete.php':
+                require BASE_PATH . '/app/controllers/GenreController.php';
+                $controller = new GenreController($this->smarty, $this->pdo);
+                $controller->deleteExecute();
+                break;
             default:
                 http_response_code(404);
                 echo "Страницата не съществува.";

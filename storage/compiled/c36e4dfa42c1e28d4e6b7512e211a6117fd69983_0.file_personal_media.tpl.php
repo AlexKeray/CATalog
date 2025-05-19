@@ -1,43 +1,44 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-16 10:12:26
+/* Smarty version 5.4.5, created on 2025-05-19 11:06:32
   from 'file:personal_media.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_6826f36a00a155_58934617',
+  'unifunc' => 'content_682af4982f41e5_43330462',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c36e4dfa42c1e28d4e6b7512e211a6117fd69983' => 
     array (
       0 => 'personal_media.tpl',
-      1 => 1747382678,
+      1 => 1747645589,
       2 => 'file',
     ),
   ),
   'includes' => 
   array (
     'file:upload.tpl' => 1,
+    'file:editGenre.tpl' => 1,
   ),
 ))) {
-function content_6826f36a00a155_58934617 (\Smarty\Template $_smarty_tpl) {
+function content_682af4982f41e5_43330462 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19633955496826f369f09b00_71468523', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1832065395682af4982bdab3_36704691', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8422573976826f36a005b48_21546440', "scripts");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1030711956682af4982ece34_18721613', "scripts");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_19633955496826f369f09b00_71468523 extends \Smarty\Runtime\Block
+class Block_1832065395682af4982bdab3_36704691 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
@@ -47,10 +48,12 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 
 <h2>Лична колекция</h2>
 
+<button id="toggle-add-form">+ Добави филм/сериал</button>
+
+<button id="toggle-genre-form" class="btn btn-secondary">+ Редактирай/добави жанр</button>
+
 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /exportExcel" class="btn btn-success">Експортирай в Excel</a>
-
-<button id="toggle-add-form">+ Добави филм/сериал</button>
 
 <div id="add-form-wrapper" style="display: none;">
     <?php $_smarty_tpl->renderSubTemplate("file:upload.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), (int) 0, $_smarty_current_dir);
@@ -68,6 +71,12 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
     </form>
 
     <div id="search-results"></div>
+
+</div>
+
+<div id="genre-form-wrapper" style="display: none;">
+    <?php $_smarty_tpl->renderSubTemplate("file:editGenre.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), (int) 0, $_smarty_current_dir);
+?>
 </div>
 
 <?php if ((true && ($_smarty_tpl->hasVariable('media') && null !== ($_smarty_tpl->getValue('media') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('media')) > 0) {?>      <?php
@@ -124,7 +133,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);
 }
 /* {/block "content"} */
 /* {block "scripts"} */
-class Block_8422573976826f36a005b48_21546440 extends \Smarty\Runtime\Block
+class Block_1030711956682af4982ece34_18721613 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
@@ -133,6 +142,16 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 
 <?php echo '<script'; ?>
 >
+
+    function showGenreAlert(message, type = 'success') {
+        const html = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
+        message +
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Затвори"></button>' +
+        '</div>';
+
+        $('#genre-alert-placeholder').html(html);
+    }
+
     function handleToggleUploadForm() {
 
         $('#toggle-add-form').on('click', function () {
@@ -171,6 +190,90 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
                 }
             });
     }
+
+    function handleToggleGenreForm() {
+        $('#toggle-genre-form').on('click', function () {
+            const wrapper = $('#genre-form-wrapper');
+            const isVisible = wrapper.is(':visible');
+            wrapper.slideToggle(200);
+            $(this).text(isVisible ? '+ Редактирай/добави жанр' : '- Редактирай/добави жанр');
+        });
+
+        $('#genre-select-main').on('change', function () {
+            const selected = $(this).find('option:selected'); 
+            const value = $(this).val();
+
+            if (value === 'new') {
+                $('#new-genre-fields').slideDown(150);
+                $('#create-genre-btn').show();
+                $('#edit-genre-btn, #delete-genre-btn').hide();
+                $('input[name="genre_name"]').val('');
+                $('textarea[name="genre_description"]').val('');
+            } else if (value !== '') {
+                $('#new-genre-fields').slideDown(150);
+                $('#create-genre-btn').hide();
+                $('#edit-genre-btn, #delete-genre-btn').show();
+                const name = selected.data('name') || '';
+                const desc = selected.data('description') || '';
+                $('input[name="genre_name"]').val(name);
+                $('textarea[name="genre_description"]').val(desc);
+            } else {
+                $('#new-genre-fields').slideUp(150);
+                $('#create-genre-btn, #edit-genre-btn, #delete-genre-btn').hide();
+                $('input[name="genre_name"]').val('');
+                $('textarea[name="genre_description"]').val('');
+            }
+        });
+
+        $('#create-genre-btn').on('click', function () {
+        const name = $('input[name="genre_name"]').val();
+        const description = $('textarea[name="genre_description"]').val();
+
+        $.post('<?php echo $_smarty_tpl->getValue('base_url');?>
+/genre_create.php', { name, description }, function (res) {
+            location.reload();
+            sessionStorage.setItem('genreMessage', res.message);
+            sessionStorage.setItem('genreMessageType', 'success');
+        }, 'json');
+        });
+
+        $('#edit-genre-btn').on('click', function () {
+            const id = $('#genre-select-main').val();
+            const name = $('input[name="genre_name"]').val();
+            const description = $('textarea[name="genre_description"]').val();
+
+            $.post('<?php echo $_smarty_tpl->getValue('base_url');?>
+/genre_edit.php', { id, name, description }, function (res) {
+                sessionStorage.setItem('genreMessage', res.message);
+                sessionStorage.setItem('genreMessageType', 'success');
+                location.reload();
+            }, 'json');
+        });
+
+
+
+        $('#delete-genre-btn').on('click', function () {
+            const id = $('#genre-select-main').val();
+
+            if (!confirm('Сигурен ли си, че искаш да изтриеш този жанр?')) return;
+
+            $.post('<?php echo $_smarty_tpl->getValue('base_url');?>
+/genre_delete.php', { id }, function (res) {
+                sessionStorage.setItem('genreMessage', res.message);
+                sessionStorage.setItem('genreMessageType', 'success');
+                location.reload();
+            }, 'json').fail(function (xhr) {
+                try {
+                    const res = JSON.parse(xhr.responseText);
+                    showGenreAlert(res.message, 'danger');
+                } catch {
+                    showGenreAlert('Възникна грешка при изтриването.', 'danger');
+                }
+            });
+        });
+
+    }
+
 
     function handleTMDbQueryAjax() {
 
@@ -259,11 +362,22 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 
     $(function () {
 
+        const message = sessionStorage.getItem('genreMessage');
+        const type = sessionStorage.getItem('genreMessageType');
+
+        if (message) {
+            showGenreAlert(message, type || 'success');
+            sessionStorage.removeItem('genreMessage');
+            sessionStorage.removeItem('genreMessageType');
+        }
+
         handleToggleUploadForm();
 
         handleToggleEpisodesInput();
 
         handleToggleNewGenreInput();
+
+        handleToggleGenreForm();
 
         handleTMDbQueryAjax();
     
