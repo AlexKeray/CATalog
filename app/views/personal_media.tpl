@@ -11,6 +11,8 @@
 
 <a href="{$base_url}/exportExcel" class="btn btn-success">Експортирай в Excel</a>
 
+<a href="{$base_url}/export_pdf" class="btn btn-danger">Експортирай в PDF</a>
+
 <div id="add-form-wrapper" style="display: none;">
     {include file="upload.tpl"}
 

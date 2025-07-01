@@ -13,7 +13,13 @@
 
         {if isset($media) && $media|@count > 0}  {* $media|@count брои колко елемента има в $media *}
             {foreach from=$media item=mediaItem}
+                <hr>
                 <div style="margin-bottom: 30px;">
+                    {if $mediaItem.image_path}
+                        <img src="{$mediaItem.image_path}" alt="Постер" style="width: 200px; height: auto;">
+                    {else}
+                        <img src="misc/question.jpg" alt="Без снимка" style="width: 200px; height: auto;">
+                    {/if}
                     <h3>{$mediaItem.name}</h3>
                     <p>Тип: {$mediaItem.type_name}</p>
                     <p>Жанр: {$mediaItem.genre_name}</p>
@@ -22,11 +28,9 @@
                         <p>Брой епизоди: {$mediaItem.episodes_count}</p>
                     {/if}
                     <p>Продължителност: {$mediaItem.duration} минути</p>
-                    {if $mediaItem.image_path}
-                        <img src="{$mediaItem.image_path}" alt="Постер" style="max-width: 200px;">
-                    {/if}
+
                 </div>
-                <hr>
+                
             {/foreach}
         {else}
             <p>Няма добавени филми/сериали.</p>

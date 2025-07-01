@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.5, created on 2025-05-19 11:06:32
+/* Smarty version 5.4.5, created on 2025-05-20 07:52:21
   from 'file:personal_media.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.5',
-  'unifunc' => 'content_682af4982f41e5_43330462',
+  'unifunc' => 'content_682c189510aba9_50433607',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c36e4dfa42c1e28d4e6b7512e211a6117fd69983' => 
     array (
       0 => 'personal_media.tpl',
-      1 => 1747645589,
+      1 => 1747720231,
       2 => 'file',
     ),
   ),
@@ -22,23 +22,23 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
     'file:editGenre.tpl' => 1,
   ),
 ))) {
-function content_682af4982f41e5_43330462 (\Smarty\Template $_smarty_tpl) {
+function content_682c189510aba9_50433607 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1832065395682af4982bdab3_36704691', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1274514638682c18950874e5_40683258', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1030711956682af4982ece34_18721613', "scripts");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1443319549682c1895101a65_84376475', "scripts");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_1832065395682af4982bdab3_36704691 extends \Smarty\Runtime\Block
+class Block_1274514638682c18950874e5_40683258 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
@@ -54,6 +54,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';
 
 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /exportExcel" class="btn btn-success">Експортирай в Excel</a>
+
+<a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/export_pdf" class="btn btn-danger">Експортирай в PDF</a>
 
 <div id="add-form-wrapper" style="display: none;">
     <?php $_smarty_tpl->renderSubTemplate("file:upload.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), (int) 0, $_smarty_current_dir);
@@ -133,7 +136,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);
 }
 /* {/block "content"} */
 /* {block "scripts"} */
-class Block_1030711956682af4982ece34_18721613 extends \Smarty\Runtime\Block
+class Block_1443319549682c1895101a65_84376475 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CATalog\\app\\views';

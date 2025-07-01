@@ -137,28 +137,38 @@ class Router {
                 $controller = new MediaController($this->smarty, $this->pdo);
                 $controller->editShow((int)$matches[1]);
                 break;
-
             case '/edit.php':
                 require BASE_PATH . '/app/controllers/mediaController.php';
                 $controller = new MediaController($this->smarty, $this->pdo);
                 $controller->editExecute();
                 break;
             case '/genre_create.php':
-                require BASE_PATH . '/app/controllers/GenreController.php';
+                require BASE_PATH . '/app/controllers/genreController.php';
                 $controller = new GenreController($this->smarty, $this->pdo);
                 $controller->createExecute();
                 break;
 
             case '/genre_edit.php':
-                require BASE_PATH . '/app/controllers/GenreController.php';
+                require BASE_PATH . '/app/controllers/genreController.php';
                 $controller = new GenreController($this->smarty, $this->pdo);
                 $controller->editExecute();
                 break;
 
             case '/genre_delete.php':
-                require BASE_PATH . '/app/controllers/GenreController.php';
+                require BASE_PATH . '/app/controllers/genreController.php';
                 $controller = new GenreController($this->smarty, $this->pdo);
                 $controller->deleteExecute();
+                break;
+            case '/export_pdf':
+                require BASE_PATH . '/app/controllers/exportPdfController.php';
+                $controller = new ExportPdfController($this->smarty, $this->pdo);
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $controller->exportExecute();
+                }
+                else {
+                    http_response_code(405);
+                    echo "Страницата не съществува.";
+                }
                 break;
             default:
                 http_response_code(404);
