@@ -111,6 +111,7 @@ class Router {
                     echo "Страницата не съществува.";
                 }
                 break;
+                
             case '/searchAjax':
                 require BASE_PATH . '/app/controllers/searchController.php';
                 $controller = new SearchController($this->smarty, $this->pdo);
@@ -121,6 +122,7 @@ class Router {
                     http_response_code(405);
                 }
                 break;
+
             case '/exportExcel':
                 require BASE_PATH . '/app/controllers/exportExcelController.php';
                 $controller = new ExportExcelController($this->smarty, $this->pdo);
@@ -132,33 +134,37 @@ class Router {
                     echo "Страницата не съществува.";
                 }
                 break;
+
             case (preg_match('#^/edit/(\d+)$#', $pageUri, $matches) ? true : false):
                 require BASE_PATH . '/app/controllers/mediaController.php';
                 $controller = new MediaController($this->smarty, $this->pdo);
                 $controller->editShow((int)$matches[1]);
                 break;
+
             case '/edit.php':
                 require BASE_PATH . '/app/controllers/mediaController.php';
                 $controller = new MediaController($this->smarty, $this->pdo);
                 $controller->editExecute();
                 break;
-            case '/genre_create.php':
+
+            case '/genre_create':
                 require BASE_PATH . '/app/controllers/genreController.php';
                 $controller = new GenreController($this->smarty, $this->pdo);
                 $controller->createExecute();
                 break;
 
-            case '/genre_edit.php':
+            case '/genre_edit':
                 require BASE_PATH . '/app/controllers/genreController.php';
                 $controller = new GenreController($this->smarty, $this->pdo);
                 $controller->editExecute();
                 break;
 
-            case '/genre_delete.php':
+            case '/genre_delete':
                 require BASE_PATH . '/app/controllers/genreController.php';
                 $controller = new GenreController($this->smarty, $this->pdo);
                 $controller->deleteExecute();
                 break;
+
             case '/export_pdf':
                 require BASE_PATH . '/app/controllers/exportPdfController.php';
                 $controller = new ExportPdfController($this->smarty, $this->pdo);
@@ -170,6 +176,31 @@ class Router {
                     echo "Страницата не съществува.";
                 }
                 break;
+
+            case '/favourites':
+                require BASE_PATH . '/app/controllers/favouritesController.php';
+                $controller = new FavouritesController($this->smarty, $this->pdo);
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    $controller->favouritesShow();
+                }
+                else {
+                    http_response_code(405);
+                    echo "Страницата не съществува.";
+                }
+                break;
+
+            case '/delete':
+                require BASE_PATH . '/app/controllers/mediaController.php';
+                $controller = new MediaController($this->smarty, $this->pdo);
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $controller->deleteExecute();
+                }
+                else {
+                    http_response_code(405);
+                    echo "Страницата не съществува.";
+                }
+                break;
+
             default:
                 http_response_code(404);
                 echo "Страницата не съществува.";

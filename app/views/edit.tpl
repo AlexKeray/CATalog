@@ -2,68 +2,102 @@
 
 {block name="content"}
 
-<form action="{$base_url}/edit.php" method="post" enctype="multipart/form-data">
+<h2 class="text-center text-white my-4">Твоите филми и сериали</h2>
+
+<form class="text-white" action="{$base_url}/edit.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="media_id" value="{$media.id}">
 
-    {if $media.image_path}
-        <img src="{$base_url}/{$media.image_path}"  id="preview-image" alt="Постер" style="width: 200px; height: auto; margin-bottom: 10px;"><br>
-    {else}
-        <img src="{$base_url}/misc/question.jpg"  id="preview-image" alt="Без снимка" style="width: 200px; height: auto;"><br>
-    {/if}
+    <div class="d-flex justify-content-center align-items-center flex-wrap gap-5">
+        <!-- Лява колона: полетата -->
+        <div style="flex: 1 1 360px; max-width: 360px;">
+            <div class="mb-3">
+                <label for="type-select" class="form-label">Тип:</label>
+                <select name="type-id" id="type-select" class="form-select" required>
+                    <option value="">Избери тип</option>
+                    {foreach from=$types item=type}
+                        <option value="{$type.id}" {if $type.id == $media.type_id}selected{/if}>{$type.name}</option>
+                    {/foreach}
+                </select>
+            </div>
 
-    <label>Тип:</label>
-    <select name="type-id" id="type-select" required>
-        <option value="">Избери тип</option>
-        {foreach from=$types item=type}
-            <option value="{$type.id}" {if $type.id == $media.type_id}selected{/if}>{$type.name}</option>
-        {/foreach}
-    </select><br><br>
+            <div class="mb-3">
+                <label for="genre-select" class="form-label">Жанр:</label>
+                <select name="genre" id="genre-select" class="form-select" required>
+                    <option value=""></option>
+                    {foreach from=$genres item=genre}
+                        <option value="{$genre.id}" {if $genre.id == $media.genre_id}selected{/if}>{$genre.name}</option>
+                    {/foreach}
+                </select>
+            </div>
 
-    <label>Жанр:</label>
-    <select name="genre" id="genre-select" required>
-        <option value="">Избери жанр</option>
-        {foreach from=$genres item=genre}
-            <option value="{$genre.id}" {if $genre.id == $media.genre_id}selected{/if}>{$genre.name}</option>
-        {/foreach}
-        <option value="other">Друго</option>
-    </select><br><br>
+            <div class="mb-3" id="custom-genre-wrapper" style="display: none;">
+                <label for="custom_genre_name" class="form-label">Нов жанр:</label>
+                <input type="text" name="custom_genre_name" id="custom_genre_name" class="form-control">
+            </div>
 
-    <div id="custom-genre-wrapper" style="display: none;">
-        <label for="custom_genre_name">Нов жанр:</label>
-        <input type="text" name="custom_genre_name" id="custom_genre_name"><br><br>
+            <div class="mb-3">
+                <label for="name" class="form-label">Име:</label>
+                <input type="text" name="name" id="name" value="{$media.name}" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Снимка:</label>
+                <input type="file" name="image" id="image" class="form-control" accept="image/*">
+            </div>
+
+            <input type="hidden" name="poster_url" id="poster_url">
+
+            <div class="mb-3">
+                <label for="year" class="form-label">Година:</label>
+                <input type="number" name="year" id="year" class="form-control" min="1800" max="2100" value="{$media.year}">
+            </div>
+
+            <div class="mb-3">
+                <label for="duration" class="form-label">Продължителност (в минути):</label>
+                <input type="number" name="duration" id="duration" class="form-control" min="1" value="{$media.duration}">
+            </div>
+
+            <div class="mb-3" id="episodes-wrapper" {if $media.type_id == 2}style="display: block;"{else}style="display: none;"{/if}>
+                <label for="episodes_count" class="form-label">Брой епизоди:</label>
+                <input type="number" name="episodes_count" id="episodes_count" class="form-control" min="1" value="{$media.episodes_count}">
+            </div>
+        </div>
+
+        <!-- Дясна колона: preview снимка, центрирана вертикално -->
+        <div class="card movie-card position-relative overflow-hidden bg-dark border" style="max-height: 450px; max-width: 300px; border-color: black !important">
+            <!-- Снимка без изрязване -->
+            <div class="d-flex justify-content-center align-items-center bg-dark">
+                {if $media.image_path}
+                    <img src="{$base_url}/{$media.image_path}" class="img-fluid object-fit-contain" style="max-height: 100%; max-width: 100%;" alt="Постер">
+                {else}
+                    <img src="{$base_url}/misc/questionWhite.png" class="img-fluid object-fit-contain" style="max-height: 100%; max-width: 100%;" alt="Постер">
+                {/if}
+            </div>
+        </div>
+
     </div>
 
-    <label>Име:</label>
-    <input type="text" name="name" id="name" value="{$media.name}" required><br><br>
-
-    <label>Снимка:</label>
-    <input type="file" name="image" id="image" accept="image/*"><br><br>
-
-    <input type="hidden" name="poster_url" id="poster_url">
-
-    <label>Година:</label>
-    <input type="number" name="year" id="year" min="1800" max="2100" value="{$media.year}"><br><br>
-
-    <div id="episodes-wrapper" {if $media.type_id == 2}style="display: block;"{else}style="display: none;"{/if}>
-        <label for="episodes_count">Брой епизоди:</label>
-        <input type="number" name="episodes_count" id="episodes_count" min="1" value="{$media.episodes_count}"><br><br>
+    <!-- Центриран бутон -->
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-outline-primary rounded-pill px-4">Запази промяната</button>
     </div>
-
-    <label>Продължителност (в минути):</label>
-    <input type="number" name="duration" id="duration" min="1" value="{$media.duration}"><br><br>
-
-    <button type="submit">Запази промяната</button>
 </form>
 
 {/block}
 
 {block name="scripts"}
-
 <script>
+    $(function () {
+        handleToggleEpisodesInput();
+        handleToggleNewGenreInput();
+
+        $('#type-select').trigger('change');
+        $('#genre-select').trigger('change');
+    });
+
     function handleToggleEpisodesInput() {
         $('#type-select').on('change', function () {
             const selected = $(this).find("option:selected").text().toLowerCase();
-
             if (selected === 'сериал') {
                 $('#episodes-wrapper').slideDown(150);
             } else {
@@ -72,43 +106,5 @@
             }
         });
     }
-
-    function handleToggleNewGenreInput() {
-        $('#genre-select').on('change', function () {
-            const selected = $(this).find("option:selected").text().toLowerCase();
-
-            if (selected === 'друго') {
-                $('#custom-genre-wrapper').slideDown(150);
-            } else {
-                $('#custom-genre-wrapper').slideUp(150);
-                $('#custom_genre_name').val('');
-            }
-        });
-    }
-
-    function handleImagePreview() {
-        $('#image').on('change', function (event) {
-            const fileInput = event.target;
-            const preview = document.getElementById('preview-image');
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            }
-        });
-    }
-
-    $(function () {
-        handleToggleEpisodesInput();
-        handleToggleNewGenreInput();
-        handleImagePreview();
-
-        $('#type-select').trigger('change');
-        $('#genre-select').trigger('change');
-    });
 </script>
-
 {/block}

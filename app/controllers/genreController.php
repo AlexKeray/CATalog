@@ -26,7 +26,13 @@ class GenreController extends BaseController
             try {
                 $stmt = $this->pdo->prepare("INSERT INTO genres (name, description) VALUES (?, ?)");
                 $stmt->execute([$name, $description]);
-                echo json_encode(['message' => 'Жанрът е създаден.']);
+                $id = $this->pdo->lastInsertId(); // ВЗИМАМЕ ID-то
+
+                echo json_encode([
+                    'success' => true,
+                    'id' => $id,
+                    'message' => 'Жанрът е създаден.'
+                ]);
             } catch (PDOException $e) {
                 $this->printException($e);
                 http_response_code(500);
@@ -35,6 +41,7 @@ class GenreController extends BaseController
             http_response_code(400);
         }
     }
+
 
     public function editExecute()
     {

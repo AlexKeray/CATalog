@@ -17,6 +17,9 @@ class MediaController extends BaseController
         $this->laodGenres();
         $this->loadPersonalMedia();
 
+        $pageName = 'personal_media';
+        $this->smarty->assign('pageName', $pageName);
+
         $this->smarty->display('personal_media.tpl');
     }
 
@@ -36,6 +39,10 @@ class MediaController extends BaseController
 
             $media = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $this->smarty->assign('media', $media);
+
+            $editMode = true;
+            $this->smarty->assign('editMode', $editMode);
+
         } catch (PDOException $e) {
             $this->printException($e);
         }
@@ -183,7 +190,9 @@ class MediaController extends BaseController
         $type = $_POST['type-id'] ?? null;
         $genre = $_POST['genre'] ?? null;
         $year = $_POST['year'] ?? null;
+        $year = $this->nullIfEmpty($year);
         $duration = $_POST['duration'] ?? null;
+        $duration = $this->nullIfEmpty($duration);
         $episodes = $_POST['episodes_count'] ?? null;
         $episodes = $this->nullIfEmpty($episodes);
 
@@ -226,6 +235,34 @@ class MediaController extends BaseController
         $this->setAlert(Alert::MovieEditedSuccessfull, AlertType::Success);
         $this->redirect(BASE_URL . '/personal-media.php');
     }
+
+    public function deleteExecute()
+    {
+        $this->authorise();
+
+        $mediaId = $_POST['id'] ?? null; // id на филм
+
+        if (!$mediaId) {
+            http_response_code(400); // липсва id
+            return;
+        }
+
+        try {
+            $stmt = $this->pdo->prepare('DELETE FROM media WHERE id = ? AND user_id = ?');
+            $stmt->execute([$mediaId, $this->user['id']]);
+
+            if ($stmt->rowCount() === 0) {
+                http_response_code(403); // не е правилният потребител
+                return;
+            }
+
+            http_response_code(200);
+        } catch (PDOException $e) {
+            $this->printException($e);
+            http_response_code(500); // някаква грешка
+        }
+    }
+
 
     // public function searchExecute()
     // {

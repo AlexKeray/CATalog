@@ -14,6 +14,9 @@ class HomeController extends BaseController {
 
         $this->loadMedia();
 
+        $pageName = 'home';
+        $this->smarty->assign('pageName', $pageName);
+
         $this->smarty->display('home.tpl');
     }
 
@@ -30,6 +33,10 @@ class HomeController extends BaseController {
 
             $media = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $this->smarty->assign('media', $media);
+
+            $editMode = false;
+            $this->smarty->assign('editMode', $editMode);
+            
         } catch (PDOException $e) {
             $this->printException($e);
         }

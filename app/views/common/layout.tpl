@@ -1,107 +1,149 @@
 <!DOCTYPE html>
 <html lang="bg">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-    <meta charset="UTF-8">
-    <title>CATalog</title>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+        <meta charset="UTF-8">
+        <title>CATalog</title>
 
-    {* 
-        Bootstrap CSS
-        Взима се от външен сървър а не локално.
-    *}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    {* Bootstrap Icons *}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+        <!-- Bootstrap CSS и икони -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-</head>
-<body>
+        <style>
+            .debug-border {
+                border: 0px dashed deeppink !important;
+            }
+        </style>
 
-    <nav id="mainNav" class="navbar navbar-expand-md sticky-top py-3 navbar-dark bg-dark">
-        <div class="container">
-            {* Тук ще е навигационната лента. Тя ще е вляво от логото. *}
-            <div class="collapse navbar-collapse multi-collapse" id="menu1">
-                {* Занимава се с nav-link-овете *}
-                <ul class="navbar-nav mе-auto d-flex">
-                    <li class="nav-item px-3">
-                        <a class="nav-link" href="{$base_url}/home.php">Начало</a>
-                    </li>
-                    {if isset($user.id)}
-                        <li class="nav-item px-3">
-                            <a class="nav-link" href="{$base_url}/personal-media.php">Лична колекция</a>
-                        </li>
-                    {/if}
-                </ul>
-            </div>
+    </head>
 
-            
-            {* Тук ще е логото, което трябва да е снимка а не надпис *}
-            <a class="navbar-brand text-white" href="#">CATalog</a>
+    <style>
+    .bg-darker {
+        background-color: #121212 !important; /* по-тъмен от bg-dark */
+    }
+    </style>
 
-            {* Хамбургер меню бутона*}
-            <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target=".multi-collapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <body class="bg-dark">
+        <nav class="navbar navbar-expand-md sticky-top py-3 navbar-dark bg-darker">
+            <div class="container-fluid debug-border">
+                <div class="row align-items-center w-100 gx-0 debug-border">
 
-            {*
-                Тук ще са бутоните за логин и регистрация 
-                или името на потребителя и изход 
-            *}
-            <div class="collapse navbar-collapse multi-collapse d-flex" id="menu2">
-                {if isset($user.id)}
-                    <div class="d-flex ms-auto align-items-center">
-                        <ul class="navbar-nav d-flex mb-0">
-                            <li class="nav-item px-3">
-                                <a class="nav-link" href="#">Welcome {($user.username)}</a>
+                    <!-- Лява част (md и нагоре) -->
+                    <div class="col-md-4 d-none d-md-block debug-border">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link {if $pageName == 'home'}active{/if}" href="{$base_url}/home.php">Начало</a>
                             </li>
+                            {if isset($user.id)}
+                                <li class="nav-item">
+                                    <a class="nav-link {if $pageName == 'personal_media'}active{/if}" href="{$base_url}/personal-media.php">Твоите филми и сериали</a>
+                                </li>
+                            {/if}
                         </ul>
-                        <a class="btn btn-primary shadow ms-2" role="button" href="{$base_url}/logout.php">Изход</a>
                     </div>
-                {else}
-                    <div class="d-flex ms-auto align-items-center">
-                        <a class="btn btn-primary shadow ms-2" role="button" href="{$base_url}/register.php">Регистрация</a>
-                        <a class="btn btn-primary shadow ms-2" role="button" href="{$base_url}/login.php">Вход</a>
+
+                    <!-- Празна колона, само за малки екрани -->
+                    <div class="col-3 d-md-none debug-border"></div>
+
+                    <!-- Център: логото -->
+                    <div class="col-6 col-md-4 text-center debug-border">
+                        <a class="navbar-brand m-0" href="#">CATalog</a>
                     </div>
-                {/if}
+
+                    <!-- Дясна част: Username и Вход+Регистрация/Изход -->
+                    <div class="col-md-4 d-none d-md-flex justify-content-end align-items-center gap-2 debug-border">
+                        {if isset($user.id)}
+                            <p class="text-white me-2 mb-0">{($user.username)}</p>
+                            <a class="btn btn-outline-light rounded-pill" href="{$base_url}/logout.php">Изход</a>
+                        {else}
+                            <a class="btn btn-outline-light rounded-pill" href="{$base_url}/login.php">Вход</a>
+                            <a class="btn btn-light text-dark rounded-pill" href="{$base_url}/register.php">Регистрация</a>
+                        {/if}
+                    </div>
+
+                    <!-- Хамбургер бутон (sm) -->
+                    <div class="col-3 d-md-none d-flex justify-content-end align-items-center gap-2 px-2 debug-border">
+                        {if isset($user.id)}
+                            <p class="text-white me-2 mb-0">{($user.username)}</p>
+                        {/if}
+                        <button class="navbar-toggler"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#navbarCollapse"
+                                aria-controls="navbarCollapse"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+
+                    <!-- Меню за мобилни устройства -->
+                    <div class="col-12 d-md-none">
+                        <div class="collapse navbar-collapse mt-2" id="navbarCollapse">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <ul class="navbar-nav w-100">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-center {if $pageName == 'home'}active{/if}" href="{$base_url}/home.php">Начало</a>
+                                    </li>
+                                    {if isset($user.id)}
+                                        <li class="nav-item">
+                                            <a class="nav-link text-center {if $pageName == 'personal_media'}active{/if}" href="{$base_url}/personal-media.php">Лична колекция</a>
+                                        </li>
+                                    {/if}
+                                </ul>
+
+                                {if isset($user.id)}
+                                
+                                    <div class="d-flex justify-content-center gap-2 mt-3">
+                                        <form method="post" action="{$base_url}/logout.php">
+                                            <a class="btn btn-outline-light rounded-pill" href="{$base_url}/logout.php">Изход</a>
+                                        </form>
+                                    </div>
+                                {else}
+                                    <div class="d-flex justify-content-center gap-2 mt-3">
+                                        <a class="btn btn-outline-light rounded-pill" href="{$base_url}/login.php">Вход</a>
+                                        <a class="btn btn-light text-dark rounded-pill" href="{$base_url}/register.php">Регистрация</a>
+                                    </div>
+                                {/if}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-<hr>
+        <hr>
 
-{if isset($message)}
-    <div class="alert alert-success" role="alert">
-        {$message}
-    </div>
-{/if}
+        {if isset($message)}
+            <div class="alert alert-success" role="alert">
+                {$message}
+            </div>
+        {/if}
+        {if isset($success)}
+            <div class="alert alert-success" role="alert">
+                {$success}
+            </div>
+        {/if}
+        {if isset($warning)}
+            <div class="alert alert-warning" role="alert">
+                {$warning}
+            </div>
+        {/if}
+        {if isset($error)}
+            <div class="alert alert-danger" role="alert">
+                {$error}
+            </div>
+        {/if}
 
-{if isset($success)}
-    <div class="alert alert-success" role="alert">
-        {$success}
-    </div>
-{/if}
+        <div id="genre-alert-placeholder"></div>
 
-{if isset($warning)}
-    <div class="alert alert-warning" role="alert">
-        {$warning}
-    </div>
-{/if}
+        {* Основно съдържание тук *}
+        {block name="content"}{/block}
 
-{if isset($error)}
-    <div class="alert alert-danger" role="alert">
-        {$error}
-    </div>
-{/if}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        
+        {block name="scripts"}{/block}
 
-<div id="genre-alert-placeholder"></div>
-
-{* Основно съдържание тук *}
-{block name="content"}{/block}
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-{block name="scripts"}{/block}
-
-</body>
+    </body>
 </html>

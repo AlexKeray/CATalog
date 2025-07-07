@@ -2,38 +2,8 @@
 
 {block name="content"}
 
-    
-    {if isset($user.id)}
-        <h1>Здравей, {$user.username}!</h1>
-    {else}
-        <h1>Здравей!</h1>
-    {/if}
+    <h2 class="text-center text-white my-4">Списък с филми и сериали</h2>
 
-        <h2>Списък с филми и сериали</h2>
-
-        {if isset($media) && $media|@count > 0}  {* $media|@count брои колко елемента има в $media *}
-            {foreach from=$media item=mediaItem}
-                <hr>
-                <div style="margin-bottom: 30px;">
-                    {if $mediaItem.image_path}
-                        <img src="{$mediaItem.image_path}" alt="Постер" style="width: 200px; height: auto;">
-                    {else}
-                        <img src="misc/question.jpg" alt="Без снимка" style="width: 200px; height: auto;">
-                    {/if}
-                    <h3>{$mediaItem.name}</h3>
-                    <p>Тип: {$mediaItem.type_name}</p>
-                    <p>Жанр: {$mediaItem.genre_name}</p>
-                    <p>Година: {$mediaItem.year}</p>
-                    {if $mediaItem.type_name == "Сериал"}
-                        <p>Брой епизоди: {$mediaItem.episodes_count}</p>
-                    {/if}
-                    <p>Продължителност: {$mediaItem.duration} минути</p>
-
-                </div>
-                
-            {/foreach}
-        {else}
-            <p>Няма добавени филми/сериали.</p>
-        {/if}
+    {include file="common/media.tpl" media=$media editMode=$editMode}
 
 {/block}
