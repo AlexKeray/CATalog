@@ -16,19 +16,19 @@
     <a class="btn btn-outline-danger rounded-pill" href="{$base_url}/export_pdf">Експортирай в PDF</a>
 </div>
 
-<div id="add-form-wrapper" style="display: none;">
-    {include file="common/upload.tpl"}
+<div id="add-form-wrapper" style="display: none; margin-bottom: 25px;">
+    {include file="common/upload.tpl" allGenres=$allGenres}
     {include file="common/searchTmdb.tpl"}
 </div>
 
-<div id="genre-form-wrapper" style="display: none;">
-    {include file="editGenre.tpl"}
+<div id="genre-form-wrapper" style="display: none; margin-bottom: 25px;">
+    {include file="editGenre.tpl" userGenres=$userGenres}
 </div>
 
 {if isset($media) && $media|@count > 0}  {* $media|@count брои колко елемента има в $media *}
     {include file="common/media.tpl" media=$media editMode=$editMode}
 {else}
-    <p>Няма добавени филми/сериали.</p>
+    <p class="text-center" style="color:white;">Няма добавени филми/сериали.</p>
 {/if}
 
 
@@ -42,13 +42,32 @@
 
     const baseUrl = '{$base_url}';
 
-    function showGenreAlert(message, type = 'success') {
-        const html = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
-        message +
-        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Затвори"></button>' +
-        '</div>';
+    function showAlert(message, type = 'message') {
+        const $alert = $('#global-alert');
 
-        $('#genre-alert-placeholder').html(html);
+        const alertClasses = {
+            message: 'alert-info',
+            success: 'alert-success',
+            warning: 'alert-warning',
+            error:   'alert-danger'
+        };
+
+        // Нормализиране на типа
+        let bootstrapClass;
+        if (type in alertClasses) {
+            bootstrapClass = alertClasses[type];
+        } else {
+            bootstrapClass = alertClasses.message;
+        }
+
+        // Показване на съобщението
+        $alert
+            .removeClass('d-none alert-info alert-success alert-warning alert-danger')
+            .addClass('alert ' + bootstrapClass)
+            .text(message)
+            .fadeIn();
+
+        setTimeout(() => $alert.fadeOut(), 5000);
     }
 
     function handleToggleUploadForm() {
@@ -146,14 +165,13 @@
         });
     }
 
-
     function handleCreateGenre() {
         $('#create-genre-btn').on('click', function () {
             const name = $('#create-genre-name').val().trim();
             const description = $('#create-genre-description').val().trim();
 
             if (!name) {
-                showGenreAlert('Името е задължително.', 'danger');
+                showAlert('Името е задължително.', 'error');
                 return;
             }
 
@@ -164,51 +182,81 @@
                         .attr('data-name', name)
                         .attr('data-description', description)
                         .text(name);
-                    $('#edit-genre-select').append(option);
-                    showGenreAlert(res.message, 'success');
+
+                    $('#genre-select, #edit-genre-select').append(option);
+
+                    // Изчистване на полетата
+                    $('#create-genre-name').val('');
+                    $('#create-genre-description').val('');
+
+                    showAlert('Жанрът е създаден успешно.', 'success');
                 } else {
-                    showGenreAlert(res.message || 'Грешка при създаване.', 'danger');
+                    showAlert('Възникна грешка.', 'error');
                 }
             }, 'json').fail(function (xhr) {
                 const res = xhr.responseJSON || {};
-                showGenreAlert(res.message || 'Възникна грешка при заявката.', 'danger');
+                showAlert('Възникна грешка.', 'error');
             });
         });
     }
 
 
-function handleEditGenre() {
-    $('#edit-genre-btn').on('click', function () {
-        const $select = $('#edit-genre-select');
-        const id = $select.val();
-        const name = $('#edit-genre-name').val().trim();
-        const description = $('#edit-genre-description').val().trim();
+    function handleEditGenre() {
+        $('#edit-genre-btn').on('click', function () {
+            const $select = $('#edit-genre-select');
+            const id = $select.val();
+            const name = $('#edit-genre-name').val().trim();
+            const description = $('#edit-genre-description').val().trim();
 
-        if (!id || !name) {
-            showGenreAlert('Изберете жанр и попълнете име.', 'danger');
-            return;
-        }
+            if (!id || !name) {
+                showAlert('Изберете жанр и попълнете име.', 'error');
+                return;
+            }
 
-        $.post(baseUrl + '/genre_edit', { id, name, description }, function (res) {
-            const $option = $select.find('option[value="' + id + '"]');
-            $option
-                .text(name)
-                .data('name', name)
-                .data('description', description);
+            $.post(baseUrl + '/genre_edit', { id, name, description }, function (res) {
+                let alertType = 'success';
 
-            $select.val(id);
-            $('#edit-genre-name').val(name);
-            $('#edit-genre-description').val(description);
-            showGenreAlert(res.message || 'Жанрът е редактиран.', 'success');
-        }, 'json').fail(function (xhr) {
-            const res = xhr.responseJSON || {};
-            showGenreAlert(res.message || 'Грешка при редакцията.', 'danger');
+                switch (res.status) {
+                    case 'unauthorized':
+                        alertType = 'error';
+                        break;
+                    case 'no_change':
+                        alertType = 'warning';
+                        break;
+                    case 'updated':
+                    default:
+                        alertType = 'success';
+                        break;
+                }
+
+                if (res.status === 'updated') {
+                    // Промяна в edit-genre-select
+                    const $optionEdit = $('#edit-genre-select').find('option[value="' + id + '"]');
+                    $optionEdit
+                        .text(name)
+                        .data('name', name)
+                        .data('description', description);
+
+                    // Промяна и в genre-select
+                    const $optionAdd = $('#genre-select').find('option[value="' + id + '"]');
+                    $optionAdd
+                        .text(name)
+                        .data('name', name)
+                        .data('description', description);
+
+                    // Обновяване на стойности
+                    $select.val(id);
+                    $('#edit-genre-name').val(name);
+                    $('#edit-genre-description').val(description);
+                }
+
+                showAlert(res.message, alertType);
+            }, 'json').fail(function (xhr) {
+                const res = xhr.responseJSON || {};
+                showAlert(res.message, 'error');
+            });
         });
-    });
-}
-
-
-
+    }
 
     function handleDeleteGenre() {
         $('#delete-genre-btn').on('click', function () {
@@ -216,26 +264,29 @@ function handleEditGenre() {
             const id = $select.val();
 
             if (!id) {
-                showGenreAlert('Моля избери жанр за изтриване.', 'danger');
+                showAlert('Моля избери жанр за изтриване.', 'error');
                 return;
             }
 
             if (!confirm('Сигурен ли си, че искаш да изтриеш този жанр?')) return;
 
             $.post(baseUrl + '/genre_delete', { id }, function (res) {
-                $select.find('option[value="' + id + '"]').remove();
+                // Премахване от всички селекти
+                $('#edit-genre-select option[value="' + id + '"]').remove();
+                $('#genre-select option[value="' + id + '"]').remove();
+
+                // Изчистване на полетата
                 $select.val('');
                 $('#edit-genre-name').val('');
                 $('#edit-genre-description').val('');
-                showGenreAlert(res.message || 'Жанрът е изтрит.', 'success');
+
+                showAlert('Жанрът е изтрит.', 'success');
             }, 'json').fail(function (xhr) {
                 const res = xhr.responseJSON || {};
-                showGenreAlert(res.message || 'Грешка при изтриването.', 'danger');
+                showAlert('Възникна грешка.', 'error');
             });
         });
     }
-
-
 
     function handleTMDbQueryAjax() {
         $(document).ready(function () {
@@ -258,18 +309,36 @@ function handleEditGenre() {
         $('#search-results').on('click', '.fill-form-btn', function () {
             const btn = $(this);
 
+            // Изчистване на избрания файл от компютъра
+            $('#image').val('');
+
+            // Попълване на стойности
             $('#name').val(btn.data('title'));
             $('#year').val(btn.data('year'));
             $('#duration').val(btn.data('duration'));
+
+            // Постер
+            const posterUrl = btn.data('poster');
+            const fallback = $('#poster_preview').data('fallback') || 'misc/questionWhite.png';
+
+            if (posterUrl) {
+                $('#poster_url').val(posterUrl);
+                $('#poster_preview').attr('src', posterUrl);
+            } else {
+                $('#poster_url').val('');
+                $('#poster_preview').attr('src', fallback);
+            }
+
+            // Тип
             $('#type-select option').each(function () {
                 if ($(this).text().trim().toLowerCase() === btn.data('type').toLowerCase()) {
                     $('#type-select').val($(this).val()).trigger('change');
                 }
             });
 
+            // Жанр
             const genreText = btn.data('genre').trim();
             let matched = false;
-
             $('#genre-select option').each(function () {
                 if ($(this).text().trim().toLowerCase() === genreText.toLowerCase()) {
                     $('#genre-select').val($(this).val()).trigger('change');
@@ -282,20 +351,20 @@ function handleEditGenre() {
                 $('#custom_genre_name').val(genreText);
             }
 
-            if (btn.data('type') === 'сериал') { // или 'Сериал', ако подаваш текст
-                $('#episodes-container').html(`
-                    <label for="episodes_count">Брой епизоди:</label>
-                    <input type="number" name="episodes_count" id="episodes_count" class="form-control" min="1">
-                `);
+            // Епизоди
+            if (btn.data('type').toLowerCase() === 'сериал') {
+                $('#episodes-wrapper').show();
                 $('#episodes_count').val(btn.data('episodes'));
             } else {
-                $('#episodes-container').empty();
+                $('#episodes-wrapper').hide();
+                $('#episodes_count').val('');
             }
-
-            const posterUrl = btn.data('poster');
-            $('#poster_url').val(posterUrl);
         });
     }
+
+
+
+
 
     function handleDeleteMedia() {
         $(document).on('click', '.delete-btn', function () {
@@ -319,6 +388,27 @@ function handleEditGenre() {
         });
     }
 
+    $(document).ready(function () {
+        // Показване на избрана снимка от компютъра
+        $('#image').on('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#poster_preview').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Показване на външна снимка (от TMDb)
+        const posterUrl = $('#poster_url').val();
+        if (posterUrl) {
+            $('#poster_preview').attr('src', posterUrl);
+        }
+    });
+
+
 
     $(function () {
 
@@ -326,7 +416,7 @@ function handleEditGenre() {
         const type = sessionStorage.getItem('genreMessageType');
 
         if (message) {
-            showGenreAlert(message, type || 'success');
+            showAlert(message, 'success');
             sessionStorage.removeItem('genreMessage');
             sessionStorage.removeItem('genreMessageType');
         }

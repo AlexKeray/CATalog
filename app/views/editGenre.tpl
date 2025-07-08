@@ -27,7 +27,7 @@
                     <label for="edit-genre-select" class="form-label">Жанр:</label>
                     <select id="edit-genre-select" name="genre" class="form-select">
                         <option value=""></option>
-                        {foreach from=$genres item=genre}
+                        {foreach from=$userGenres item=genre}
                             <option value="{$genre.id}" data-name="{$genre.name|escape}" data-description="{$genre.description|default:''|escape}">
                                 {$genre.name}
                             </option>

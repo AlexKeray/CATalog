@@ -24,8 +24,16 @@ class GenreController extends BaseController
             }
 
             try {
-                $stmt = $this->pdo->prepare("INSERT INTO genres (name, description) VALUES (?, ?)");
-                $stmt->execute([$name, $description]);
+                $checkStmt = $this->pdo->prepare("SELECT id FROM genres WHERE name = ? LIMIT 1");
+                $checkStmt->execute([$name]);
+
+                if ($checkStmt->fetch()) {
+                    echo json_encode(['message' => 'Жанр с това име вече съществува.']);
+                    return;
+                }
+
+                $stmt = $this->pdo->prepare("INSERT INTO genres (name, description, user_id) VALUES (?, ?, ?)");
+                $stmt->execute([$name, $description, $this->user['id']]);
                 $id = $this->pdo->lastInsertId(); // ВЗИМАМЕ ID-то
 
                 echo json_encode([
@@ -53,9 +61,40 @@ class GenreController extends BaseController
             $description = trim($_POST['description'] ?? '');
 
             try {
-                $stmt = $this->pdo->prepare("UPDATE genres SET name = ?, description = ? WHERE id = ?");
-                $stmt->execute([$name, $description, $id]);
-                echo json_encode(['message' => 'Жанрът е редактиран.']);
+                // 1. Проверка за собственост върху жанра
+                $stmt = $this->pdo->prepare("SELECT name, description FROM genres WHERE id = ? AND user_id = ?");
+                $stmt->execute([$id, $this->user['id']]);
+                $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$existing) {
+                    http_response_code(403);
+                    echo json_encode([
+                        'success' => false,
+                        'status' => 'unauthorized',
+                        'message' => 'Нямаш достъп до този жанр.'
+                    ]);
+                    return;
+                }
+
+                // 2. Няма промени
+                if ($existing['name'] === $name && $existing['description'] === $description) {
+                    echo json_encode([
+                        'success' => true,
+                        'status' => 'no_change',
+                        'message' => 'Няма направени промени.'
+                    ]);
+                    return;
+                }
+
+                // 3. UPDATE
+                $stmt = $this->pdo->prepare("UPDATE genres SET name = ?, description = ? WHERE id = ? AND user_id = ?");
+                $stmt->execute([$name, $description, $id, $this->user['id']]);
+
+                echo json_encode([
+                    'success' => true,
+                    'status' => 'updated',
+                    'message' => 'Жанрът е редактиран.'
+                ]);
             } catch (PDOException $e) {
                 $this->printException($e);
                 http_response_code(500);
@@ -65,6 +104,7 @@ class GenreController extends BaseController
         }
     }
 
+
     public function deleteExecute()
     {
         $this->authorise();
@@ -73,9 +113,17 @@ class GenreController extends BaseController
             $id = (int)$_POST['id'];
 
             try {
-                $stmt = $this->pdo->prepare("DELETE FROM genres WHERE id = ?");
-                $stmt->execute([$id]);
-                echo json_encode(['success' => true, 'message' => 'Жанрът е изтрит.']);
+                $stmt = $this->pdo->prepare("DELETE FROM genres WHERE id = ? AND user_id=?");
+                $stmt->execute([$id, $this->user['id']]);
+                if ($stmt->rowCount() > 0) {
+                    echo json_encode(['success' => true, 'message' => 'Жанрът е изтрит.']);
+                } else {
+                    http_response_code(403);
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Нямаш право да изтриеш този жанр или не съществува.'
+                    ]);
+                }
             } catch (PDOException $e) {
                 if ($e->getCode() === '23000') { // foreign key constraint violation
                     http_response_code(409); // Conflict

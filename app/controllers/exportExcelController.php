@@ -31,6 +31,7 @@ class ExportExcelController extends BaseController
             JOIN types t ON m.type_id = t.id
             JOIN users u ON m.user_id = u.id
             WHERE m.user_id = ?
+            ORDER BY m.id
         ");
 
         $stmt->execute([$this->user['id']]);

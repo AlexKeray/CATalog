@@ -141,7 +141,7 @@ class Router {
                 $controller->editShow((int)$matches[1]);
                 break;
 
-            case '/edit.php':
+            case '/edit':
                 require BASE_PATH . '/app/controllers/mediaController.php';
                 $controller = new MediaController($this->smarty, $this->pdo);
                 $controller->editExecute();
@@ -170,18 +170,6 @@ class Router {
                 $controller = new ExportPdfController($this->smarty, $this->pdo);
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $controller->exportExecute();
-                }
-                else {
-                    http_response_code(405);
-                    echo "Страницата не съществува.";
-                }
-                break;
-
-            case '/favourites':
-                require BASE_PATH . '/app/controllers/favouritesController.php';
-                $controller = new FavouritesController($this->smarty, $this->pdo);
-                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                    $controller->favouritesShow();
                 }
                 else {
                     http_response_code(405);

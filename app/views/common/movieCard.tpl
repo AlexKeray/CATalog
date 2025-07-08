@@ -87,6 +87,21 @@
                     </button>
                 </div>
             {/if}
+            {if $copyMode == true}
+                <div class="d-flex justify-content-center gap-3 pt-2 pb-1">
+                    <button class="btn p-0 bg-transparent border-0 icon-btn fill-form-btn"
+                        data-id="{$mediaItem.id}"
+                        data-title="{$mediaItem.name|escape}"
+                        data-type="{$mediaItem.type_name|escape}"
+                        data-genre="{$mediaItem.genre_name|escape}"
+                        data-year="{$mediaItem.year|escape}"
+                        data-duration="{$mediaItem.duration|escape}"
+                        data-episodes="{$mediaItem.episodes_count|escape}"
+                        data-poster="{$mediaItem.image_path|escape}">
+                        <img src="misc/copyPaste.svg" alt="Копирай" width="24" height="24">
+                    </button>
+                </div>
+            {/if}
         </div>
     </div>
 </div>

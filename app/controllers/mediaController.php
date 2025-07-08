@@ -29,8 +29,8 @@ class MediaController extends BaseController
             $stmt = $this->pdo->prepare('
                 SELECT m.*, g.name AS genre_name, t.name AS type_name
                 FROM media m
-                JOIN genres g ON m.genre_id = g.id
-                JOIN types t ON m.type_id = t.id
+                LEFT JOIN genres g ON m.genre_id = g.id
+                LEFT JOIN types t ON m.type_id = t.id
                 WHERE m.user_id = ?
                 ORDER BY m.id ASC
             ');
@@ -93,7 +93,7 @@ class MediaController extends BaseController
             $duration = $_POST['duration'] ?? null;
             $duration = $this->nullIfEmpty($duration);
 
-            if (empty($genreId) || empty($name) || empty($typeId)) {
+            if (empty($name) || empty($typeId)) {
                 $this->setAlert(Alert::EmptyRequiredFields, AlertType::Warning);
                 $this->personalMediaShow();
                 return;
@@ -188,7 +188,7 @@ class MediaController extends BaseController
         $id = $_POST['media_id'] ?? null;
         $name = trim($_POST['name'] ?? '');
         $type = $_POST['type-id'] ?? null;
-        $genre = $_POST['genre'] ?? null;
+        $genre = $this->nullIfEmpty($_POST['genre'] ?? null);
         $year = $_POST['year'] ?? null;
         $year = $this->nullIfEmpty($year);
         $duration = $_POST['duration'] ?? null;
@@ -263,32 +263,22 @@ class MediaController extends BaseController
         }
     }
 
-
-    // public function searchExecute()
-    // {
-    //     $query = $_GET['query'] ?? '';
-    //     $results = [];
-
-    //     if ($query !== '') {
-    //         $token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZjNlMGQ3N2QyZTk4OTM4NjE2NmIxNDU3ODljYjhlOCIsIm5iZiI6MS43NDcwODMxMDIyNjU5OTk4ZSs5LCJzdWIiOiI2ODIyNWY1ZTcxZTMwMjNmZjFhMTY2MTUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.c-ulm2_OoZACessEr_7LIYlDFVDATkIj8zVIQCw_F_Y';
-    //         $searchUrl = 'https://api.themoviedb.org/3/search/multi?query=' . urlencode($query) . '&page=1';
-    //         $results = $this->searchTmdb($searchUrl, $token);
-    //     }
-
-    //     $this->smarty->assign('search_results', $results);
-    //     $this->smarty->assign('search_query', $query);
-    //     $this->smarty->display('search_results.tpl');
-    // }
-
     private function laodGenres()
     {
         try {
-            $stmt = $this->pdo->query('SELECT id, name, description FROM genres ORDER BY name');
-            $genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $this->smarty->assign('genres', $genres);
+            $stmt = $this->pdo->prepare('SELECT id, name, description, user_id FROM genres ORDER BY name');
+            $stmt->execute();
+            $allGenres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $this->smarty->assign('allGenres', $allGenres);
+
+            $stmt = $this->pdo->prepare('SELECT id, name, description FROM genres WHERE user_id = ? ORDER BY name');
+            $stmt->execute([$this->user['id']]);
+            $userGenres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $this->smarty->assign('userGenres', $userGenres);
         } catch (PDOException $e) {
             $this->printException($e);
         }
+
     }
 
     private function laodTypes()

@@ -29,7 +29,7 @@ class RegisterController extends BaseController
 
                 $_SESSION['username'] = $username;
 
-                $this->redirect(BASE_URL . '/home.php');
+                $this->redirect(BASE_URL . '/login.php');
 
             } catch (PDOException $e) {
 

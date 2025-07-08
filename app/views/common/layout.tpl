@@ -87,7 +87,7 @@
                                     </li>
                                     {if isset($user.id)}
                                         <li class="nav-item">
-                                            <a class="nav-link text-center {if $pageName == 'personal_media'}active{/if}" href="{$base_url}/personal-media.php">Лична колекция</a>
+                                            <a class="nav-link text-center {if $pageName == 'personal_media'}active{/if}" href="{$base_url}/personal-media.php">Твоите филми и сериали</a>
                                         </li>
                                     {/if}
                                 </ul>
@@ -111,6 +111,8 @@
                 </div>
             </div>
         </nav>
+
+        <div id="global-alert" class="alert d-none" role="alert"></div>
 
         <hr>
 

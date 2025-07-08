@@ -14,6 +14,9 @@ class SearchController extends BaseController
         $query = $_GET['query'] ?? '';
         $media = [];
 
+        $duration = 0;
+        $results = [];
+
         $duration;
         if ($query !== '') {
             $token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZjNlMGQ3N2QyZTk4OTM4NjE2NmIxNDU3ODljYjhlOCIsIm5iZiI6MS43NDcwODMxMDIyNjU5OTk4ZSs5LCJzdWIiOiI2ODIyNWY1ZTcxZTMwMjNmZjFhMTY2MTUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.c-ulm2_OoZACessEr_7LIYlDFVDATkIj8zVIQCw_F_Y';
@@ -31,6 +34,7 @@ class SearchController extends BaseController
 
         $this->smarty->assign('media', $media);
         $this->smarty->assign('editMode', false);
+        $this->smarty->assign('copyMode', true);
 
         $this->smarty->display('tmdbResults.tpl');
     }

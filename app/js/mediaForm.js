@@ -1,17 +1,3 @@
-{extends file="common/layout.tpl"}
-
-{block name="content"}
-
-<h2 class="text-center text-white my-4">Твоите филми и сериали</h2>
-
-{include file="common/mediaForm.tpl" submit_url="{$base_url}/edit" submit_text="Запази промяната" media=$media allGenres=$allGenres types=$types}
-
-{/block}
-
-{block name="scripts"}
-
-<script>
-
 $(function () {
     handleToggleEpisodesInput();
     handleToggleNewGenreInput();
@@ -50,7 +36,3 @@ document.getElementById('image').addEventListener('change', function (event) {
         preview.style.display = 'none';
     }
 });
-
-</script>
-
-{/block}
