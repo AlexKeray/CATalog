@@ -21,13 +21,14 @@
     <div class="card movie-card position-relative overflow-hidden bg-dark border border-darker" style="max-height: 80vh; min-height: 300px;">
         
         <!-- Снимка без изрязване -->
-        <div class="d-flex justify-content-center align-items-center bg-dark">
+        <div class="d-flex justify-content-center align-items-center bg-dark" style="height: 350px; overflow: hidden;">
             {if $mediaItem.image_path}
-                <img src="{$mediaItem.image_path}" class="img-fluid object-fit-contain" style="max-height: 100%; max-width: 100%;" alt="Постер">
+                <img src="{$mediaItem.image_path}" class="img-fluid" style="height: 100%; width: auto; object-fit: contain;" alt="Постер">
             {else}
-                <img src="misc/questionWhite.png" class="img-fluid object-fit-contain" style="max-height: 100%; max-width: 100%;" alt="Постер">
+                <img src="misc/questionWhite.png" class="img-fluid" style="height: 100%; width: auto; object-fit: contain;" alt="Постер">
             {/if}
         </div>
+
 
         <!-- Заглавие (винаги видимо) -->
         <div class="position-absolute bottom-0 start-0 w-100 text-center text-white bg-dark bg-opacity-75 py-2">
