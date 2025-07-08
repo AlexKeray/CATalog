@@ -339,6 +339,7 @@
             // Жанр
             const genreText = btn.data('genre').trim();
             let matched = false;
+
             $('#genre-select option').each(function () {
                 if ($(this).text().trim().toLowerCase() === genreText.toLowerCase()) {
                     $('#genre-select').val($(this).val()).trigger('change');
@@ -347,9 +348,11 @@
             });
 
             if (!matched) {
-                $('#genre-select').val('other').trigger('change');
-                $('#custom_genre_name').val(genreText);
+                // Добавяме нов <option> към селекта
+                const newOption = new Option(genreText, '__new__:' + genreText, true, true);
+                $('#genre-select').append(newOption).trigger('change');
             }
+
 
             // Епизоди
             if (btn.data('type').toLowerCase() === 'сериал') {
@@ -361,10 +364,6 @@
             }
         });
     }
-
-
-
-
 
     function handleDeleteMedia() {
         $(document).on('click', '.delete-btn', function () {

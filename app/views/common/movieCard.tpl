@@ -60,7 +60,7 @@
                     <p class="mb-1">Година: {$mediaItem.year}</p>
                 {/if}
                 {if $mediaItem.type_name == "Сериал"}
-                    {if $mediaItem.episodes_count === null || $mediaItem.episodes_count === ''}
+                    {if $mediaItem.episodes_count === null || $mediaItem.episodes_count === '' || $mediaItem.episodes_count === 0}
                         <p class="mb-1">Епизоди: ???</p>
                     {else}
                         <p class="mb-1">Епизоди: {$mediaItem.episodes_count}</p>

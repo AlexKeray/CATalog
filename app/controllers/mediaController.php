@@ -67,8 +67,30 @@ class MediaController extends BaseController
             $typeRecord = $typeStmt->fetch();
             $typeName = $typeRecord ? $typeRecord['name'] : null;
             $typeName = $this->nullIfEmpty($typeName);
-            $genreId = $_POST['genre'] ?? null;
-            $genreId = $this->nullIfEmpty($genreId);
+            
+            $genreRaw = $_POST['genre'] ?? null;
+            $genreRaw = $this->nullIfEmpty($genreRaw);
+
+            $genreId = null;
+
+            if (str_starts_with($genreRaw, '__new__:')) {
+                $newGenreName = trim(substr($genreRaw, 8));
+
+                // Провери дали вече съществува
+                $check = $this->pdo->prepare('SELECT id FROM genres WHERE name = ?');
+                $check->execute([$newGenreName]);
+                $genreId = $check->fetchColumn();
+
+                if (!$genreId) {
+                    $insertGenre = $this->pdo->prepare('INSERT INTO genres (name, description, user_id) VALUES (?, "", ?)');
+                    $insertGenre->execute([$newGenreName, $this->user['id']]);
+                    $genreId = $this->pdo->lastInsertId();
+                }
+            } else {
+                $genreId = $genreRaw;
+            }
+
+
             $customGenreName = trim($_POST['custom_genre_name'] ?? null);
             $customGenreName = $this->nullIfEmpty($customGenreName);
 

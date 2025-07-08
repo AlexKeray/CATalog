@@ -8,9 +8,7 @@
             <h2 class="mb-4 fw-bold">Създай акаунт</h2>
 
             <div class="mb-4">
-                <div class="bg-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                    <i class="bi bi-person-plus fs-2 text-white"></i>
-                </div>
+                <img src="http://localhost/CATalog/misc/clipboard.svg" alt="Иконка" style="width: 160px; height: auto;">
             </div>
 
             <form action="register.php" method="post">

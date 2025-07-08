@@ -72,7 +72,7 @@
     </div>
 
     <!-- Центриран бутон -->
-    <div class="text-center mt-4">
+    <div class="text-center mt-4  mb-4">
         <button type="submit" class="btn btn-outline-primary rounded-pill px-4">{$submit_text}</button>
     </div>
 </form>
