@@ -35,8 +35,6 @@ class RegisterController extends BaseController
 
                 $this->setAlert(Alert::UsernameTaken, AlertType::Error);
 
-                //$this->printException($e);
-
                 $this->redirect(BASE_URL . '/register.php');
             }
 

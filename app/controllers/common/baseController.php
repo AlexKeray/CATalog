@@ -15,7 +15,7 @@ class BaseController
 
         $this->assignUser();
 
-        $this->loadAlert(); // зарежда съобщението от сесията в смартито
+        $this->loadAlert(); // зарежда alert-а от сесията в смартито
     }
 
     protected function redirect($url)
@@ -42,13 +42,13 @@ class BaseController
     }
 
     // метод за задаване на съобщение в сесията
-    // типът на съобщението може да бъде 'message', 'error' или 'warning'
+    // типът на съобщението може да бъде 'message', 'success' 'error' или 'warning'
     // методът работи заедно с метода loadAlert() който зарежда съобщението от сесията в смартито
     // това е така за да може да се предават съобщения през редиректи
     public function setAlert(Alert $text, AlertType $type = AlertType::Message)
     {
         $allowedTypes = [AlertType::Message, AlertType::Success, AlertType::Warning, AlertType::Error];
-        //$allowedTypes = ['message', 'error', 'warning'];
+        //$allowedTypes = ['message', 'success' 'error', 'warning'];
 
     
         if (!in_array($type, $allowedTypes)) {
@@ -64,7 +64,7 @@ class BaseController
     {
         foreach ([AlertType::Message, AlertType::Success, AlertType::Warning, AlertType::Error] as $alertType) {
             if (isset($_SESSION[$alertType->value])) {
-                $this->smarty->assign($alertType->value, $_SESSION[$alertType->value]);  // $this->smarty->assign(var_name, var_value);
+                $this->smarty->assign($alertType->value, $_SESSION[$alertType->value]);
                 unset($_SESSION[$alertType->value]);
             }
         }

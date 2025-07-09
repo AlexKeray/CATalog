@@ -18,6 +18,7 @@ class MediaController extends BaseController
         $this->loadPersonalMedia();
 
         $pageName = 'personal_media';
+
         $this->smarty->assign('pageName', $pageName);
 
         $this->smarty->display('personal_media.tpl');
@@ -38,6 +39,7 @@ class MediaController extends BaseController
             $stmt->execute([$this->user['id']]);
 
             $media = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             $this->smarty->assign('media', $media);
 
             $editMode = true;
@@ -64,19 +66,22 @@ class MediaController extends BaseController
                 $this->printException($e);
                 return;
             }
-            $typeRecord = $typeStmt->fetch();
+
+            // проверява дали има такъв тип
+            $typeRecord = $typeStmt->fetch(); // връща 1 ред
             $typeName = $typeRecord ? $typeRecord['name'] : null;
             $typeName = $this->nullIfEmpty($typeName);
             
+
             $genreRaw = $_POST['genre'] ?? null;
             $genreRaw = $this->nullIfEmpty($genreRaw);
 
             $genreId = null;
 
             if (str_starts_with($genreRaw, '__new__:')) {
-                $newGenreName = trim(substr($genreRaw, 8));
+                $newGenreName = trim(substr($genreRaw, 8)); // 9ти символ и нататък
 
-                // Провери дали вече съществува
+                // проверка дали жанрът съществува
                 $check = $this->pdo->prepare('SELECT id FROM genres WHERE name = ?');
                 $check->execute([$newGenreName]);
                 $genreId = $check->fetchColumn();
@@ -91,21 +96,6 @@ class MediaController extends BaseController
             }
 
 
-            $customGenreName = trim($_POST['custom_genre_name'] ?? null);
-            $customGenreName = $this->nullIfEmpty($customGenreName);
-
-            if ($genreId === 'other' && $customGenreName !== null) {
-                $check = $this->pdo->prepare('SELECT id FROM genres WHERE name = ?');
-                $check->execute([$customGenreName]);
-                $genreId = $check->fetchColumn();
-                if (!$genreId) {
-                    $insertGenre = $this->pdo->prepare('INSERT INTO genres (name) VALUES (?)');
-                    $insertGenre->execute([$customGenreName]);
-                    $genreId = $this->pdo->lastInsertId();
-                }
-            }
-
-
             $name = trim($_POST['name'] ?? null);
             $name = $this->nullIfEmpty($name);
             $year = $_POST['year'] ?? null;
@@ -117,7 +107,7 @@ class MediaController extends BaseController
 
             if (empty($name) || empty($typeId)) {
                 $this->setAlert(Alert::EmptyRequiredFields, AlertType::Warning);
-                $this->personalMediaShow();
+                $this->personalMediaShow(); // редиректва
                 return;
             }
 
@@ -142,7 +132,7 @@ class MediaController extends BaseController
                 $uploadDir = BASE_PATH . '/storage/images/';
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
-                $imageData = @file_get_contents($posterUrl);
+                $imageData = @file_get_contents($posterUrl); // взима се от апито
                 if ($imageData) {
                     $extension = pathinfo(parse_url($posterUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
                     $fileName = uniqid() . '.' . ($extension ?: 'jpg');
@@ -218,13 +208,13 @@ class MediaController extends BaseController
         $episodes = $_POST['episodes_count'] ?? null;
         $episodes = $this->nullIfEmpty($episodes);
 
-         // Вземаме текущата снимка от базата
+         // Вземаме пътя на текущата снимка от базата
         $stmt = $this->pdo->prepare("SELECT image_path FROM media WHERE id = ? AND user_id = ?");
         $stmt->execute([$id, $this->user['id']]);
         $current = $stmt->fetch();
         $imagePath = $current ? $current['image_path'] : null;
 
-        // Ако има нова снимка – качваме я
+        // Ако има нова снимка я качваме
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = BASE_PATH . '/storage/images/';
             if (!is_dir($uploadDir)) {

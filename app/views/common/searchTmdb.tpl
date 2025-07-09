@@ -8,7 +8,7 @@
         <button type="button" id="search-button" class="btn btn-outline-primary rounded-pill px-5">Търси</button>
     </div>
     <div id="spinner" class="text-center mt-2" style="display: none;">
-        <img src="{$base_url}/misc/loading.gif" alt="Зареждане..." width="50">
+        <img src="{$base_url}/misc/catWhiteNoBG.gif" alt="Зареждане..." width="100">
     </div>
 </form>
 

@@ -77,5 +77,3 @@
     </div>
 </form>
 
-
-<!-- {$base_url}/edit.php -->

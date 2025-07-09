@@ -2,10 +2,9 @@
 
 {block name="content"}
 
-<!-- register.tpl (по същия стил) -->
     <div class="d-flex justify-content-center pt-5 bg-dark min-vh-100">
         <div class="text-center text-white w-100" style="max-width: 400px;">
-            <h2 class="mb-4 fw-bold">Създай акаунт</h2>
+            <h2 class="mb-4 fw-bold">Създай профил!</h2>
 
             <div class="mb-4">
                 <img src="http://localhost/CATalog/misc/clipboard.svg" alt="Иконка" style="width: 160px; height: auto;">

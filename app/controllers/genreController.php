@@ -24,14 +24,18 @@ class GenreController extends BaseController
             }
 
             try {
+                // проверка дали има такъв жанр
                 $checkStmt = $this->pdo->prepare("SELECT id FROM genres WHERE name = ? LIMIT 1");
                 $checkStmt->execute([$name]);
 
+                // ако има кофти
                 if ($checkStmt->fetch()) {
                     echo json_encode(['message' => 'Жанр с това име вече съществува.']);
+                    // http_response_code(400);
                     return;
                 }
-
+                
+                // ако не insert-ваме новия жанр
                 $stmt = $this->pdo->prepare("INSERT INTO genres (name, description, user_id) VALUES (?, ?, ?)");
                 $stmt->execute([$name, $description, $this->user['id']]);
                 $id = $this->pdo->lastInsertId(); // ВЗИМАМЕ ID-то
@@ -61,7 +65,7 @@ class GenreController extends BaseController
             $description = trim($_POST['description'] ?? '');
 
             try {
-                // 1. Проверка за собственост върху жанра
+                // Проверяваме дали потребителя е направи жанра
                 $stmt = $this->pdo->prepare("SELECT name, description FROM genres WHERE id = ? AND user_id = ?");
                 $stmt->execute([$id, $this->user['id']]);
                 $existing = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -76,7 +80,7 @@ class GenreController extends BaseController
                     return;
                 }
 
-                // 2. Няма промени
+                // Проверяваме дали има изобщо нанесени промени
                 if ($existing['name'] === $name && $existing['description'] === $description) {
                     echo json_encode([
                         'success' => true,
@@ -86,7 +90,7 @@ class GenreController extends BaseController
                     return;
                 }
 
-                // 3. UPDATE
+                // Update-ваме
                 $stmt = $this->pdo->prepare("UPDATE genres SET name = ?, description = ? WHERE id = ? AND user_id = ?");
                 $stmt->execute([$name, $description, $id, $this->user['id']]);
 
@@ -113,6 +117,7 @@ class GenreController extends BaseController
             $id = (int)$_POST['id'];
 
             try {
+                // Трием запис който е на потребителя
                 $stmt = $this->pdo->prepare("DELETE FROM genres WHERE id = ? AND user_id=?");
                 $stmt->execute([$id, $this->user['id']]);
                 if ($stmt->rowCount() > 0) {

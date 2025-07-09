@@ -34,6 +34,7 @@ class HomeController extends BaseController {
             $media = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $this->smarty->assign('media', $media);
 
+            // Дали да има иконки за edit и delete
             $editMode = false;
             $this->smarty->assign('editMode', $editMode);
             

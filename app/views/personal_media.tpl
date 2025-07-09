@@ -200,7 +200,6 @@
         });
     }
 
-
     function handleEditGenre() {
         $('#edit-genre-btn').on('click', function () {
             const $select = $('#edit-genre-select');
@@ -251,6 +250,7 @@
                 }
 
                 showAlert(res.message, alertType);
+
             }, 'json').fail(function (xhr) {
                 const res = xhr.responseJSON || {};
                 showAlert(res.message, 'error');
@@ -306,11 +306,11 @@
     }
 
     function handleFillUploadFormFromQuery() {
-        $('#search-results').on('click', '.fill-form-btn', function () {
-            const btn = $(this);
+        $('#search-results').on('click', '.fill-form-btn', function () { // закача event-listener: #search-results е родителския div, а .fill-form-btn е нещо с такъв клас което е в родителя
+            const btn = $(this); // кликнатият бутон
 
             // Изчистване на избрания файл от компютъра
-            $('#image').val('');
+            $('#image').val(''); // $('#image') е jQuery селектор който избира елемент с id image.
 
             // Попълване на стойности
             $('#name').val(btn.data('title'));
@@ -319,11 +319,11 @@
 
             // Постер
             const posterUrl = btn.data('poster');
-            const fallback = $('#poster_preview').data('fallback') || 'misc/questionWhite.png';
+            const fallback = $('#poster_preview').data('fallback') || 'misc/questionWhite.png'; // $('#poster_preview').data('fallback') връща стойността на data-fallback= атрибута
 
             if (posterUrl) {
                 $('#poster_url').val(posterUrl);
-                $('#poster_preview').attr('src', posterUrl);
+                $('#poster_preview').attr('src', posterUrl); // слага нови данни на src= атрибута
             } else {
                 $('#poster_url').val('');
                 $('#poster_preview').attr('src', fallback);
@@ -340,7 +340,7 @@
             const genreText = btn.data('genre').trim();
             let matched = false;
 
-            $('#genre-select option').each(function () {
+            $('#genre-select option').each(function () { // обхожда опциите в селекта
                 if ($(this).text().trim().toLowerCase() === genreText.toLowerCase()) {
                     $('#genre-select').val($(this).val()).trigger('change');
                     matched = true;
@@ -349,7 +349,7 @@
 
             if (!matched) {
                 // Добавяме нов <option> към селекта
-                const newOption = new Option(genreText, '__new__:' + genreText, true, true);
+                const newOption = new Option(genreText, '__new__:' + genreText, true, true); // <option value="__new__:CustomGenre" selected>CustomGenre</option>
                 $('#genre-select').append(newOption).trigger('change');
             }
 
@@ -389,14 +389,14 @@
 
     $(document).ready(function () {
         // Показване на избрана снимка от компютъра
-        $('#image').on('change', function () {
+        $('#image').on('change', function () { // закачен event-handler при смяна в елемент с id image
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#poster_preview').attr('src', e.target.result);
+                reader.onload = function (e) { // вика се след reader.readAsDataURL(file);
+                    $('#poster_preview').attr('src', e.target.result); // e.target.result са данните на файла, прочетени от FileReader, като Base64 image URL
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(file); // визуализира файла направо в html-а като base64
             }
         });
 

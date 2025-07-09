@@ -4,6 +4,8 @@ class Router {
     private $smarty;
 
     public function __construct($smarty, $pdo) {
+
+        // Подаваме ги и двете на вски контролер
         $this->smarty = $smarty;
         $this->pdo = $pdo;
     }
@@ -12,13 +14,17 @@ class Router {
     // pageUri е всичко след https://localhost:8000/CATalog/
     public function direct($pageUri) { 
         switch ($pageUri) {
+
             case '/':
             case '/index.php':
             case '/home.php':
                 require BASE_PATH . '/app/controllers/homeController.php';
                 $controller = new HomeController($this->smarty, $this->pdo);
+
                 $controller->homeShow();
+
                 break;
+
             case '/register.php':
                 require BASE_PATH . '/app/controllers/registerController.php';
                 $controller = new RegisterController($this->smarty, $this->pdo);
@@ -33,7 +39,9 @@ class Router {
                     http_response_code(405);
                     echo "Страницата не съществува.";
                 }
+
                 break;
+
             case '/login.php':
                 require BASE_PATH . '/app/controllers/loginController.php';
                 $controller = new LoginController($this->smarty, $this->pdo);
@@ -48,7 +56,9 @@ class Router {
                     http_response_code(405);
                     echo "Страницата не съществува.";
                 }
+
                 break;
+
             case '/logout.php':
                 require BASE_PATH . '/app/controllers/logoutController.php';
                 $controller = new LogoutController($this->smarty);
@@ -60,7 +70,9 @@ class Router {
                     http_response_code(405);
                     echo "Страницата не съществува.";
                 }
+
                 break;
+
             case '/upload.php':
                 require BASE_PATH . '/app/controllers/mediaController.php';
                 $controller = new MediaController($this->smarty, $this->pdo);
@@ -75,7 +87,9 @@ class Router {
                     http_response_code(405);
                     echo "Страницата не съществува.";
                 }
+
                 break;
+
             case '/personal-media.php':
                 require_once BASE_PATH . '/app/controllers/mediaController.php';
                 $controller = new MediaController($this->smarty, $this->pdo);
@@ -87,7 +101,9 @@ class Router {
                     http_response_code(405);
                     echo "Страницата не съществува.";
                 }
+
                 break;
+
             case '/delete.php':
                 require BASE_PATH . '/app/controllers/deleteController.php';
                 $controller = new DeleteController($this->smarty, $this->pdo);
@@ -99,10 +115,13 @@ class Router {
                     http_response_code(405);
                     echo "Страницата не съществува.";
                 }
+
                 break;
+
             case '/search.php':
                 require BASE_PATH . '/app/controllers/searchController.php';
                 $controller = new SearchController($this->smarty, $this->pdo);
+
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $controller->searchExecute();
                 }
@@ -110,22 +129,26 @@ class Router {
                     http_response_code(405);
                     echo "Страницата не съществува.";
                 }
+
                 break;
                 
             case '/searchAjax':
                 require BASE_PATH . '/app/controllers/searchController.php';
                 $controller = new SearchController($this->smarty, $this->pdo);
+
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $controller->searchAjaxExecute();
                 }
                 else {
                     http_response_code(405);
                 }
+
                 break;
 
             case '/exportExcel':
                 require BASE_PATH . '/app/controllers/exportExcelController.php';
                 $controller = new ExportExcelController($this->smarty, $this->pdo);
+                
                 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $controller->exportExecute();
                 }
@@ -133,12 +156,15 @@ class Router {
                     http_response_code(405);
                     echo "Страницата не съществува.";
                 }
+
                 break;
 
-            case (preg_match('#^/edit/(\d+)$#', $pageUri, $matches) ? true : false):
+            case (preg_match('#^/edit/(\d+)$#', $pageUri, $matches) ? true : false): // /edit/30, при true влиза в case-а
                 require BASE_PATH . '/app/controllers/mediaController.php';
                 $controller = new MediaController($this->smarty, $this->pdo);
-                $controller->editShow((int)$matches[1]);
+
+                $controller->editShow((int)$matches[1]); // $matches[0] е целия match, $matches[1] е първата група
+
                 break;
 
             case '/edit':

@@ -12,18 +12,17 @@ class ExportPdfController extends BaseController
     {
         parent::__construct($smarty, $pdo);
 
-        // Вече е в storage/images/
-        $this->fallbackPath = BASE_PATH . '/storage/images/questionWhite.png';
+        $this->fallbackPath = BASE_PATH . '/storage/images/questionWhite.png';  // Винаги в images трябва да стои default снимката дето е въпросителен.
 
         if (!file_exists($this->fallbackPath)) {
-            die("Fallback image NOT FOUND at: " . $this->fallbackPath);
+            die("Fallback image NOT FOUND at: " . $this->fallbackPath); // die е като exit ама връща и съобщение
         }
     }
 
     public function exportExecute()
     {
 
-        $this->authorise(); // Увери се, че е защитено
+        $this->authorise(); // redirect-ва към login-а
 
         $stmt = $this->pdo->prepare("
             SELECT m.name, m.image_path, m.year, m.duration, m.episodes_count,
@@ -36,7 +35,7 @@ class ExportPdfController extends BaseController
         $stmt->execute([$this->user['id']]);
         $mediaItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $html = '<h1 style="text-align: center;">Колекция</h1>';
+        $html = '<h1 style="text-align: center;">Твоите филми и сериали.</h1>';
 
         foreach ($mediaItems as $item) {
             $imagePath = $this->resolveImagePath($item['image_path']);
@@ -72,7 +71,7 @@ class ExportPdfController extends BaseController
     }
 
 
-    private function resolveImagePath(?string $path): string
+    private function resolveImagePath(?string $path): string // ?string е стринг или null, : string е return type-а, винаги стои отзад
     {
         if (!$path) {
             return $this->fallbackPath;
@@ -80,10 +79,10 @@ class ExportPdfController extends BaseController
 
         $fullPath = BASE_PATH . DIRECTORY_SEPARATOR . $path;
 
-        // Вземаме разширението
+        //разширението
         $extension = strtolower(pathinfo($fullPath, PATHINFO_EXTENSION));
 
-        // Ако е неподдържано – fallback
+        // Ако не е поддържано – fallback
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
         if (!in_array($extension, $allowedExtensions)) {
             return $this->fallbackPath;
@@ -99,32 +98,49 @@ class ExportPdfController extends BaseController
             $path = $this->fallbackPath;
         }
 
-        [$origWidth, $origHeight, $imageType] = @getimagesize($path);
-        if (!$origWidth || !$origHeight) {
-            return ''; // защитено: няма да хвърли грешка
+        $info = getimagesize($path); // вградено в пхп, чете инфо от даден файл
+
+        if ($info === false) {
+            return ''; // Невалидно изображение или липсва файл
         }
 
+        $origWidth = $info[0];
+        $origHeight = $info[1];
+        $imageType = $info[2];
+
+        // някакви сметки за да се запазят пропорциите въпреки оразмеряването
         $ratio = $origWidth / $maxWidth;
         $newWidth = $maxWidth;
         $newHeight = (int)($origHeight / $ratio);
 
-        $image = match ($imageType) {
-            IMAGETYPE_JPEG => @imagecreatefromjpeg($path),
-            IMAGETYPE_PNG  => @imagecreatefrompng($path),
-            IMAGETYPE_GIF  => @imagecreatefromgif($path),
-            default => null,
-        };
+        $image = null;
+
+        switch ($imageType) {  // @ подтиска warning-и
+            case IMAGETYPE_JPEG:
+                $image = @imagecreatefromjpeg($path);  // трябва ни специален формат на image ресурс за да можем да го обработваме с следващите функции
+                break;
+            case IMAGETYPE_PNG:
+                $image = @imagecreatefrompng($path);
+                break;
+            case IMAGETYPE_GIF:
+                $image = @imagecreatefromgif($path);
+                break;
+        }
 
         if (!$image) {
             return '';
         }
 
-        $resized = imagecreatetruecolor($newWidth, $newHeight);
-        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $origWidth, $origHeight);
+        $resized = imagecreatetruecolor($newWidth, $newHeight);  // нужно е ама нз защо
 
-        ob_start();
-        imagejpeg($resized, null, $quality);
+        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $origWidth, $origHeight); // използва се за преоразмеряване
+
+        ob_start(); // стартира буфер, тоест всичко от рода на echo отива там а не в браузъра
+        imagejpeg($resized, null, $quality); // генерира jpeg
         return 'data:image/jpeg;base64,' . base64_encode(ob_get_clean());
+        // ob_get_clean() Взима всичко, което е събрано в output буфера (т.е. JPEG изображението), и затваря буфера
+        // base64_encode() Кодира бинарните данни на изображението в base64 текст, подходящ за HTML
+        // data:image/jpeg;base64 всяко base64 изображение трябва да започва така
     }
 }
 ?>
